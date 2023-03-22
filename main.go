@@ -1,15 +1,30 @@
 package main
 
 import (
+	"ele/dao"
 	"ele/router"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 
-	"strings"
+	_ "ele/docs" // 千万不要忘了导入把你上一步生成的docs
 )
 
-// todo swagger文档
+// @title 饿了么项目复刻
+// @version 1.0
+// @description 在东软的教学包基础上去做拓展
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name 这里写联系人信息
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host 这里写接口服务的host
+// @BasePath 这里写base path
+
 func main() {
 	parseConfig()
 	viper.WatchConfig()
@@ -18,31 +33,7 @@ func main() {
 		fmt.Println("Config file changed:", e.Name)
 	})
 	//启动数据库
+	dao.Start()
 	//启动路由
 	router.Start()
-}
-func parseConfig() {
-	//设定默认值
-	viper.SetDefault("username", "admin")
-	// 指定配置文件路径
-	configPath := "./config/config.yaml"
-	temp1 := strings.Split(configPath, "/")
-	configName := strings.Split(temp1[len(temp1)-1], ".")
-	viper.AddConfigPath(".") // 还可以在工作目录中查找配置
-	viper.SetConfigName(configName[0])
-	viper.SetConfigType(configName[1])
-	if err := viper.ReadInConfig(); err != nil {
-		// 配置文件出错
-		//todo 设置日志输出
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// 配置文件未找到错误；如果需要可以忽略
-			viper.SafeWriteConfigAs(configPath)
-			//todo 补充日志创建说明
-		} else {
-			// 配置文件被找到，但产生了另外的错误
-			panic("The configuration file was found, but another error was generated")
-		}
-	}
-
-	// 配置文件找到并成功解析
 }

@@ -1,0 +1,7 @@
+Dao:
+  host: bj-cynosdbmysql-grp-ol0z32uy.sql.tencentcdb.com:21113
+  username: ele
+  password: z!:.b6JY6S_FzLv
+  dbname: ele
+Router:
+  port: 9090
