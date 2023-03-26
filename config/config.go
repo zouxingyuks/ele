@@ -1,14 +1,14 @@
-package main
+package config
 
 import (
 	"github.com/spf13/viper"
 	"strings"
 )
 
-func parseConfig() {
+func ParseConfig() {
 	//设定默认值
 	// 指定配置文件路径
-	configPath := "./config.yaml"
+	configPath := "./config/config.yaml"
 	temp1 := strings.Split(configPath, "/")
 	configName := strings.Split(temp1[len(temp1)-1], ".")
 	viper.AddConfigPath(".") // 还可以在工作目录中查找配置

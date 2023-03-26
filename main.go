@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ele/config"
 	"ele/dao"
 	"ele/router"
 	"fmt"
@@ -26,7 +27,7 @@ import (
 // @BasePath 这里写base path
 
 func main() {
-	parseConfig()
+	config.ParseConfig()
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		// 配置文件发生变更之后会调用的回调函数
