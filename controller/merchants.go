@@ -4,7 +4,6 @@ import (
 	"ele/models"
 	"ele/tools"
 	"ele/tools/dao"
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -110,19 +109,15 @@ func PerfectMerchant(c *gin.Context) {
 
 	value := models.Merchant{}
 	err := dao.PerfectMatch(&models.Merchant{Name: name}, &value, "Dishes")
-	//jsonMarshalData, _ := json.Marshal(value)
-	fmt.Println(err)
 	if err != nil {
 		c.JSON(500, models.Response{
-			Msg: "获取失败",
-			//Data: string(jsonMarshalData),
+			Msg:  "获取失败",
 			Data: err,
 		})
 
 	} else {
 		c.JSON(200, models.Response{
-			Msg: "获取成功",
-			//Data: string(jsonMarshalData),
+			Msg:  "获取成功",
 			Data: value,
 		})
 	}
@@ -136,8 +131,6 @@ func PerfectMerchant(c *gin.Context) {
 // @Produce json
 // @Param name query string true "商家名称"
 // @Success 200 {object} models.Response "Merchant"
-// @Failure 400 {object} models.Response "ErrorResponse"
-// @Failure 500 {object} models.Response "ErrorResponse"
 // @Router /merchant/fuzzy [get]
 func FuzzyMerchant(c *gin.Context) {
 	name := c.Query("name")
@@ -151,10 +144,10 @@ func FuzzyMerchant(c *gin.Context) {
 	var values []models.Merchant
 	dao.FuzzyMatch(name, &values, "Dishes")
 	//jsonMarshalData, _ := json.Marshal(value)
-
 	c.JSON(200, models.Response{
 		Msg: "获取成功",
 		//Data: string(jsonMarshalData),
 		Data: values,
 	})
+
 }
