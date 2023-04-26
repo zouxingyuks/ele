@@ -204,11 +204,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/dishes": {
+        "/dish/list": {
             "get": {
                 "description": "获取所有菜品列表",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "订单管理"
                 ],
                 "summary": "列出所有菜品",
                 "responses": {
@@ -232,6 +235,9 @@ const docTemplate = `{
                 "description": "根据 ID 获取菜品信息",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "订单管理"
                 ],
                 "summary": "获取菜品信息",
                 "parameters": [
@@ -273,6 +279,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "商家管理"
                 ],
                 "summary": "添加商家",
                 "parameters": [
@@ -326,6 +335,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "商家管理"
+                ],
                 "summary": "模糊搜索商家信息",
                 "parameters": [
                     {
@@ -364,6 +376,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "商家管理"
+                ],
                 "summary": "列出所有商家",
                 "responses": {
                     "200": {
@@ -386,6 +401,9 @@ const docTemplate = `{
                 "description": "根据商家名称获取商家信息",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "商家管理"
                 ],
                 "summary": "准确获取商家信息",
                 "parameters": [

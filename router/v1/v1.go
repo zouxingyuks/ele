@@ -14,10 +14,7 @@ func LoadApi(v1 *gin.RouterGroup) {
 	api.POST("/users/login", controller.UserLogin)   // 用户登录
 	api.POST("/users/logout", controller.UserLogout) // 用户注销
 	loadMerchant()
-	// 菜品相关接口
-	api.GET("/dishes", controller.ListDishes)       // 获取菜品列表
-	api.GET("/dishes/:dish_id", controller.GetDish) // 根据 ID 获取菜品详情
-
+	loadDish()
 	// 订单相关接口
 	api.POST("/orders", controller.CreateOrder)             // 创建订单
 	api.GET("/orders", controller.ListOrders)               // 获取订单列表

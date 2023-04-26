@@ -9,6 +9,7 @@ import (
 )
 
 // AddMerchant 添加商家
+// @Tags 商家管理
 // @Summary 添加商家
 // @Description 添加商家
 // @Accept multipart/form-data
@@ -70,16 +71,17 @@ func AddMerchant(c *gin.Context) {
 
 }
 
-// ListMerchants 列出所有商家
+// ListMerchant 列出所有商家
+// @Tags 商家管理
 // @Summary 列出所有商家
 // @Description 获取所有商家列表
 // @Produce json
 // @Success 200 {object} models.Response
 // @Failure 500 {object} models.Response "ErrorResponse"
 // @Router /merchant/list [get]
-func ListMerchants(c *gin.Context) {
+func ListMerchant(c *gin.Context) {
 	var values []models.Merchant
-	dao.List(&values)
+	dao.List(&values, "Dishes")
 	c.JSON(200, models.Response{
 		Msg:  "下面是所有商家数据",
 		Data: values,
@@ -87,6 +89,7 @@ func ListMerchants(c *gin.Context) {
 }
 
 // PerfectMerchant 准确获取商家信息
+// @Tags 商家管理
 // @Summary 准确获取商家信息
 // @Description 根据商家名称获取商家信息
 // @Produce json
@@ -106,7 +109,7 @@ func PerfectMerchant(c *gin.Context) {
 	}
 
 	value := models.Merchant{}
-	err := dao.PerfectMatch(&models.Merchant{Name: name}, &value)
+	err := dao.PerfectMatch(&models.Merchant{Name: name}, &value, "Dishes")
 	//jsonMarshalData, _ := json.Marshal(value)
 	fmt.Println(err)
 	if err != nil {
@@ -127,6 +130,7 @@ func PerfectMerchant(c *gin.Context) {
 }
 
 // FuzzyMerchant 模糊搜索商家信息
+// @Tags 商家管理
 // @Summary 模糊搜索商家信息
 // @Description 根据商家名称模糊搜索商家信息
 // @Produce json
@@ -145,7 +149,7 @@ func FuzzyMerchant(c *gin.Context) {
 		return
 	}
 	var values []models.Merchant
-	dao.FuzzyMatch(name, &values)
+	dao.FuzzyMatch(name, &values, "Dishes")
 	//jsonMarshalData, _ := json.Marshal(value)
 
 	c.JSON(200, models.Response{

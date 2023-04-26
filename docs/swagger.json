@@ -1,14 +1,14 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "在东软的教学包基础上去做拓展",
-        "title": "饿了么项目复刻",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-          "name": "跑路了",
-          "url": "http://www.swagger.io/support",
-          "email": "support@swagger.io"
-        },
+      "description": "在东软的教学包基础上去做拓展",
+      "title": "饿了么项目复刻",
+      "termsOfService": "http://swagger.io/terms/",
+      "contact": {
+        "name": "跑路了",
+        "url": "http://www.swagger.io/support",
+        "email": "support@swagger.io"
+      },
       "license": {
         "name": "Apache 2.0",
         "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -197,11 +197,14 @@
         }
       }
     },
-    "/dishes": {
+    "/dish/list": {
       "get": {
         "description": "获取所有菜品列表",
         "produces": [
           "application/json"
+        ],
+        "tags": [
+          "订单管理"
         ],
         "summary": "列出所有菜品",
         "responses": {
@@ -225,6 +228,9 @@
         "description": "根据 ID 获取菜品信息",
         "produces": [
           "application/json"
+        ],
+        "tags": [
+          "订单管理"
         ],
         "summary": "获取菜品信息",
         "parameters": [
@@ -266,6 +272,9 @@
         ],
         "produces": [
           "application/json"
+        ],
+        "tags": [
+          "商家管理"
         ],
         "summary": "添加商家",
         "parameters": [
@@ -319,6 +328,9 @@
         "produces": [
           "application/json"
         ],
+        "tags": [
+          "商家管理"
+        ],
         "summary": "模糊搜索商家信息",
         "parameters": [
           {
@@ -357,6 +369,9 @@
         "produces": [
           "application/json"
         ],
+        "tags": [
+          "商家管理"
+        ],
         "summary": "列出所有商家",
         "responses": {
           "200": {
@@ -379,6 +394,9 @@
         "description": "根据商家名称获取商家信息",
         "produces": [
           "application/json"
+        ],
+        "tags": [
+          "商家管理"
         ],
         "summary": "准确获取商家信息",
         "parameters": [
