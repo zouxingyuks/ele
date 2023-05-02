@@ -204,6 +204,86 @@ const docTemplate = `{
                 }
             }
         },
+        "/dish/add": {
+            "post": {
+                "description": "添加菜品",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜品管理"
+                ],
+                "summary": "添加菜品",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "菜品名称",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "菜品描述",
+                        "name": "description",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "添加成功",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "添加失败",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "401": {
+                        "description": "输入非法",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/dish/fuzzy": {
+            "get": {
+                "description": "根据菜品名称模糊搜索菜品信息",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "菜品管理"
+                ],
+                "summary": "模糊搜索菜品信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "菜品名称",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dish",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/dish/list": {
             "get": {
                 "description": "获取所有菜品列表",
@@ -211,7 +291,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "订单管理"
+                    "菜品管理"
                 ],
                 "summary": "列出所有菜品",
                 "responses": {
@@ -230,22 +310,22 @@ const docTemplate = `{
                 }
             }
         },
-        "/dishes/{dish_id}": {
+        "/dish/perfect": {
             "get": {
-                "description": "根据 ID 获取菜品信息",
+                "description": "根据菜品名称准确获取菜品信息",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "订单管理"
+                    "菜品管理"
                 ],
-                "summary": "获取菜品信息",
+                "summary": "准确获取菜品信息",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "菜品 ID",
-                        "name": "dish_id",
-                        "in": "path",
+                        "type": "string",
+                        "description": "菜品名称",
+                        "name": "name",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -351,18 +431,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Merchant",
-                        "schema": {
-                            "$ref": "#/definitions/models.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "ErrorResponse",
-                        "schema": {
-                            "$ref": "#/definitions/models.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "ErrorResponse",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }

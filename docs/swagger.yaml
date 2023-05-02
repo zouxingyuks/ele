@@ -140,6 +140,59 @@ paths:
       summary: 骑手完成订单
       tags:
         - 骑手管理
+  /dish/add:
+    post:
+      consumes:
+        - multipart/form-data
+      description: 添加菜品
+      parameters:
+        - description: 菜品名称
+          in: formData
+          name: name
+          required: true
+          type: string
+        - description: 菜品描述
+          in: formData
+          name: description
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 添加成功
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: 添加失败
+          schema:
+            $ref: '#/definitions/models.Response'
+        "401":
+          description: 输入非法
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: 添加菜品
+      tags:
+        - 菜品管理
+  /dish/fuzzy:
+    get:
+      description: 根据菜品名称模糊搜索菜品信息
+      parameters:
+        - description: 菜品名称
+          in: query
+          name: name
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Dish
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: 模糊搜索菜品信息
+      tags:
+        - 菜品管理
   /dish/list:
     get:
       description: 获取所有菜品列表
@@ -156,16 +209,16 @@ paths:
             $ref: '#/definitions/models.Response'
       summary: 列出所有菜品
       tags:
-        - 订单管理
-  /dishes/{dish_id}:
+        - 菜品管理
+  /dish/perfect:
     get:
-      description: 根据 ID 获取菜品信息
+      description: 根据菜品名称准确获取菜品信息
       parameters:
-        - description: 菜品 ID
-          in: path
-          name: dish_id
+        - description: 菜品名称
+          in: query
+          name: name
           required: true
-          type: integer
+          type: string
       produces:
         - application/json
       responses:
@@ -181,9 +234,9 @@ paths:
           description: ErrorResponse
           schema:
             $ref: '#/definitions/models.Response'
-      summary: 获取菜品信息
+      summary: 准确获取菜品信息
       tags:
-        - 订单管理
+        - 菜品管理
   /merchant/add:
     post:
       consumes:
@@ -237,14 +290,6 @@ paths:
       responses:
         "200":
           description: Merchant
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: ErrorResponse
-          schema:
-            $ref: '#/definitions/models.Response'
-        "500":
-          description: ErrorResponse
           schema:
             $ref: '#/definitions/models.Response'
       summary: 模糊搜索商家信息

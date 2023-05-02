@@ -4,6 +4,7 @@ import (
 	"ele/models"
 	"ele/tools"
 	"ele/tools/dao"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -16,17 +17,21 @@ import (
 // @Produce json
 // @Param name formData string true "菜品名称"
 // @Param description formData string true "菜品描述"
-// @Param price formData float64 true "菜品价格"
-// @Param picture formData string false "菜品图片"
-// @Param merchantid formData uint true "所属餐厅id"
+// @Param picture formData string  false "菜品图片"
+// @Param price formData double true "菜品价格"
+// @Param merchantID formData int32 true "所属餐厅id"
 // @Success 200 {object} models.Response "添加成功"
 // @Success 400 {object} models.Response "添加失败"
 // @Success 401 {object} models.Response "输入非法"
 // @Router /dish/add [post]
 func AddDish(c *gin.Context) {
 	var d models.Dish
+	fmt.Println(c.ContentType())
+
 	c.ShouldBind(&d)
 	//中文校验
+	fmt.Println(2)
+
 	err := tools.CheckChinese(&d.Name)
 	if err != nil {
 		c.JSON(401, models.Response{
@@ -36,6 +41,8 @@ func AddDish(c *gin.Context) {
 		return
 
 	}
+	fmt.Println(3)
+
 	//todo 价格限定
 	//todo 图片扫描
 	//中文校验
@@ -48,6 +55,8 @@ func AddDish(c *gin.Context) {
 		return
 
 	}
+	fmt.Println(4)
+
 	value := models.Merchant{}
 	err = dao.PerfectMatch(&models.Merchant{
 		Model: gorm.Model{

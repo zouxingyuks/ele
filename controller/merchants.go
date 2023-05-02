@@ -64,7 +64,7 @@ func AddMerchant(c *gin.Context) {
 	}
 	c.JSON(200, models.Response{
 		Msg:  "添加成功",
-		Data: nil,
+		Data: m,
 	})
 	return
 
