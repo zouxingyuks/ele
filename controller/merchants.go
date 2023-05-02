@@ -107,8 +107,8 @@ func PerfectMerchant(c *gin.Context) {
 		return
 	}
 
-	value := models.Merchant{}
-	err := dao.PerfectMatch(&models.Merchant{Name: name}, &value, "Dishes")
+	var values []models.Merchant
+	err := dao.PerfectMatch(&models.Merchant{Name: name}, &values, "Dishes")
 	if err != nil {
 		c.JSON(500, models.Response{
 			Msg:  "获取失败",
@@ -118,7 +118,7 @@ func PerfectMerchant(c *gin.Context) {
 	} else {
 		c.JSON(200, models.Response{
 			Msg:  "获取成功",
-			Data: value,
+			Data: values,
 		})
 	}
 

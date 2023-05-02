@@ -17,13 +17,13 @@ func FuzzyMatch[T any](key string, values *T, preload ...string) {
 }
 
 // 精准搜索，传入查询结构体
-func PerfectMatch[T any](key *T, value *T, preload ...string) error {
+func PerfectMatch[T any](key *T, values *[]T, preload ...string) error {
 	db := tools.DB
 	//加载外键
 	for _, v := range preload {
 		db = db.Preload(v)
 	}
-	err := db.First(&value, key).Error
+	err := db.Find(&values, key).Error
 	//未查询到数据
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return err

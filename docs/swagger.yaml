@@ -156,6 +156,20 @@ paths:
           name: description
           required: true
           type: string
+        - description: 菜品图片
+          in: formData
+          name: picture
+          type: string
+        - description: 菜品价格
+          in: formData
+          name: price
+          required: true
+          type: number
+        - description: 所属餐厅id
+          in: formData
+          name: merchantID
+          required: true
+          type: integer
       produces:
         - application/json
       responses:
@@ -175,7 +189,7 @@ paths:
       tags:
         - 菜品管理
   /dish/fuzzy:
-    get:
+    post:
       description: 根据菜品名称模糊搜索菜品信息
       parameters:
         - description: 菜品名称
@@ -211,14 +225,18 @@ paths:
       tags:
         - 菜品管理
   /dish/perfect:
-    get:
+    post:
       description: 根据菜品名称准确获取菜品信息
       parameters:
         - description: 菜品名称
-          in: query
+          in: formData
           name: name
           required: true
           type: string
+        - description: 所属餐厅id
+          in: formData
+          name: merchantID
+          type: integer
       produces:
         - application/json
       responses:

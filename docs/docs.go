@@ -231,6 +231,26 @@ const docTemplate = `{
                         "name": "description",
                         "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "菜品图片",
+                        "name": "picture",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "number",
+                        "description": "菜品价格",
+                        "name": "price",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "所属餐厅id",
+                        "name": "merchantID",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -256,7 +276,7 @@ const docTemplate = `{
             }
         },
         "/dish/fuzzy": {
-            "get": {
+            "post": {
                 "description": "根据菜品名称模糊搜索菜品信息",
                 "produces": [
                     "application/json"
@@ -311,7 +331,7 @@ const docTemplate = `{
             }
         },
         "/dish/perfect": {
-            "get": {
+            "post": {
                 "description": "根据菜品名称准确获取菜品信息",
                 "produces": [
                     "application/json"
@@ -325,8 +345,14 @@ const docTemplate = `{
                         "type": "string",
                         "description": "菜品名称",
                         "name": "name",
-                        "in": "query",
+                        "in": "formData",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "所属餐厅id",
+                        "name": "merchantID",
+                        "in": "formData"
                     }
                 ],
                 "responses": {
