@@ -5,6 +5,7 @@ import (
 	"ele/tools"
 	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -17,7 +18,7 @@ import (
 // @Param name formData string true "餐厅名称"
 // @Param address formData string true "餐厅地址"
 // @Param phone formData string true "餐厅电话"
-// @Success 200 {object} models.Merchant "添加成功"
+// @Success 200 {object} interface{} "添加成功"
 // @Success 400 {object} string "添加失败"
 // @Success 401 {object} string "输入非法"
 // @Router /merchant/add [post]
@@ -61,7 +62,7 @@ func AddMerchant(c *gin.Context) {
 // @Summary 列出所有商家
 // @Description 获取所有商家列表
 // @Produce json
-// @Success 200 {array} models.Merchant "获取成功"
+// @Success 200 {array} interface{} "获取成功"
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /merchant/list [get]
@@ -77,7 +78,7 @@ func ListMerchant(c *gin.Context) {
 // @Description 根据商家名称获取商家信息
 // @Produce json
 // @Param name query string true "商家名称"
-// @Success 200 {array} models.Merchant "获取成功"
+// @Success 200 {array} interface{} "获取成功"
 // @Failure 400 {object} string "输入非法"
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
@@ -102,7 +103,7 @@ func PerfectMerchant(c *gin.Context) {
 // @Description 根据商家名称模糊搜索商家信息
 // @Produce json
 // @Param name query string true "商家名称"
-// @Success 200 {array} models.Merchant "获取成功"
+// @Success 200 {array} interface{} "获取成功"
 // @Failure 400 {object} string "输入非法"
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
@@ -118,14 +119,15 @@ func FuzzyMerchant(c *gin.Context) {
 	findCheck(c, values, err)
 }
 
-// DeleteMerchant 根据 id 删除指定商家
+// DeleteMerchant 根据 id 删除指定商家，及其菜品
 // @Tags 商家管理
-// @Summary 根据 id 删除指定商家
-// @Description 根据 id 删除指定商家
+// @Summary 根据 id 删除指定商家，及其菜品
+// @Description 根据 id 删除指定商家，及其菜品
 // @Produce json
 // @Param id query int true "商家id"
-// @Success 200 {object} interface{} "删除成功"
-// @Success 400 {object} interface{} "删除失败"
+// @Success 200 {object} string "删除成功"
+// @Success 400 {object} string "输入非法"
+// @Success 500 {object} string "删除失败"
 // @Router /merchant [delete]
 func DeleteMerchant(c *gin.Context) {
 
@@ -136,15 +138,10 @@ func DeleteMerchant(c *gin.Context) {
 	}
 
 	merchant := models.Merchant{
-		ID: uint(id),
+		Model: gorm.Model{ID: uint(id)},
 	}
-	//永久删除商家
-	err = dao.Del(&merchant, 1)
-	//jsonMarshalData, _ := json.Marshal(value)
-	if err != nil {
-		c.JSON(400, err)
-		return
-	}
-	c.JSON(200, nil)
+	//永久删除商家，选择级联硬删除
+	err = dao.Del(&merchant, 3)
+	delCheck(c, err)
 
 }

@@ -1,18 +1,13 @@
 package models
 
 import (
-	"time"
+	"gorm.io/gorm"
 )
 
 // Dish 菜品
 type Dish struct {
-	ID        uint `gorm:"primarykey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt struct {
-		Time  time.Time
-		Valid bool // Valid is true if Time is not NULL
-	} `gorm:"index"`
+	gorm.Model
+
 	Name        string    `gorm:"type:varchar(255);comment:菜品名称" json:"name,omitempty" form:"name" binding:"required"`       // 菜品名称
 	Description string    `gorm:"type:text;comment:菜品描述" json:"description,omitempty" form:"description" binding:"required"` // 菜品描述
 	Price       float64   `gorm:"type:double;comment:菜品价格" json:"price,omitempty" form:"price" binding:"required"`           // 菜品价格

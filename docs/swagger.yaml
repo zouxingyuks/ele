@@ -1,109 +1,4 @@
 basePath: /api/v1
-definitions:
-  models.Comment:
-    properties:
-      content:
-        description: 评论内容
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        properties:
-          time:
-            type: string
-          valid:
-            description: Valid is true if Time is not NULL
-            type: boolean
-        type: object
-      dishID:
-        description: 评论所属菜品id
-        type: integer
-      id:
-        type: integer
-      score:
-        description: 评论评分
-        type: integer
-      updatedAt:
-        type: string
-    type: object
-  models.Dish:
-    properties:
-      comments:
-        description: 一个菜品有很多评价，使用外键关联
-        items:
-          $ref: '#/definitions/models.Comment'
-        type: array
-      createdAt:
-        type: string
-      deletedAt:
-        properties:
-          time:
-            type: string
-          valid:
-            description: Valid is true if Time is not NULL
-            type: boolean
-        type: object
-      description:
-        description: 菜品描述
-        type: string
-      id:
-        type: integer
-      merchantID:
-        description: 所属餐厅id
-        type: integer
-      name:
-        description: 菜品名称
-        type: string
-      picture:
-        description: 菜品图片
-        type: string
-      price:
-        description: 菜品价格
-        type: number
-      updatedAt:
-        type: string
-    required:
-      - description
-      - merchantID
-      - name
-      - picture
-      - price
-    type: object
-  models.Merchant:
-    properties:
-      address:
-        description: 餐厅地址
-        type: string
-      createdAt:
-        type: string
-      deletedAt:
-        properties:
-          time:
-            type: string
-          valid:
-            description: Valid is true if Time is not NULL
-            type: boolean
-        type: object
-      dishes:
-        description: 一个餐厅有多个菜品，使用外键关联
-        items:
-          $ref: '#/definitions/models.Dish'
-        type: array
-      id:
-        type: integer
-      name:
-        description: 餐厅名称
-        type: string
-      phone:
-        description: 餐厅电话
-        type: string
-      updatedAt:
-        type: string
-    required:
-      - address
-      - name
-      - phone
-    type: object
 host: localhost:9090
 info:
   contact:
@@ -236,6 +131,33 @@ paths:
       summary: 骑手完成订单
       tags:
         - 骑手管理
+  /dish:
+    delete:
+      description: 根据 id 删除指定菜品
+      parameters:
+        - description: 菜品id
+          in: query
+          name: id
+          required: true
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: 删除成功
+          schema:
+            type: string
+        "400":
+          description: 输入非法
+          schema:
+            type: string
+        "500":
+          description: 删除失败
+          schema:
+            type: string
+      summary: 根据 id 删除指定菜品
+      tags:
+        - 菜品管理
   /dish/add:
     post:
       consumes:
@@ -300,7 +222,7 @@ paths:
           description: Dish
           schema:
             items:
-              $ref: '#/definitions/models.Dish'
+              type: object
             type: array
         "400":
           description: 请求参数不能为空
@@ -327,7 +249,7 @@ paths:
           description: Dish
           schema:
             items:
-              $ref: '#/definitions/models.Dish'
+              type: object
             type: array
         "404":
           description: 资源未找到
@@ -361,7 +283,7 @@ paths:
           description: Dish
           schema:
             items:
-              $ref: '#/definitions/models.Dish'
+              type: object
             type: array
         "400":
           description: 输入参数不能为空
@@ -393,11 +315,15 @@ paths:
         "200":
           description: 删除成功
           schema:
-            type: object
+            type: string
         "400":
+          description: 输入非法
+          schema:
+            type: string
+        "500":
           description: 删除失败
           schema:
-            type: object
+            type: string
       summary: 根据 id 删除指定商家
       tags:
         - 商家管理
@@ -428,7 +354,7 @@ paths:
         "200":
           description: 添加成功
           schema:
-            $ref: '#/definitions/models.Merchant'
+            type: object
         "400":
           description: 添加失败
           schema:
@@ -456,7 +382,7 @@ paths:
           description: 获取成功
           schema:
             items:
-              $ref: '#/definitions/models.Merchant'
+              type: object
             type: array
         "400":
           description: 输入非法
@@ -483,7 +409,7 @@ paths:
           description: 获取成功
           schema:
             items:
-              $ref: '#/definitions/models.Merchant'
+              type: object
             type: array
         "404":
           description: 资源未找到
@@ -512,7 +438,7 @@ paths:
           description: 获取成功
           schema:
             items:
-              $ref: '#/definitions/models.Merchant'
+              type: object
             type: array
         "400":
           description: 输入非法

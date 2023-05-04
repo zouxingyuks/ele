@@ -24,3 +24,19 @@ func findCheck[T any](c *gin.Context, values []T, err error) {
 }
 
 // 添加操作的检查
+func addCheck(c *gin.Context, err error) {
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, nil)
+}
+
+// 删除操作的结果检查
+func delCheck(c *gin.Context, err error) {
+	if err != nil {
+		c.JSON(500, err)
+		return
+	}
+	c.JSON(200, "删除成功")
+}

@@ -5,6 +5,8 @@ import (
 	"ele/tools"
 	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"strconv"
 )
 
 //todo 提示信息大修
@@ -47,7 +49,7 @@ func AddDish(c *gin.Context) {
 	//店铺存在性检验
 	var merchants []models.Merchant
 	err = dao.PerfectMatch(&models.Merchant{
-		ID: d.MerchantID,
+		Model: gorm.Model{ID: d.MerchantID},
 	}, &merchants)
 	if err != nil {
 		c.JSON(400, "餐厅不存在")
@@ -69,7 +71,7 @@ func AddDish(c *gin.Context) {
 // @Summary 列出所有菜品
 // @Description 获取所有菜品列表
 // @Produce application/json
-// @Success 200 {array} models.Dish "Dish"
+// @Success 200 {array} interface{} "Dish"
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /dish/list [get]
@@ -86,7 +88,7 @@ func ListDish(c *gin.Context) {
 // @Produce json
 // @Param name formData string true "菜品名称"
 // @Param merchantID formData uint true "所属餐厅id"
-// @Success 200 {array} models.Dish "Dish"
+// @Success 200 {array} interface{} "Dish"
 // @Failure 400 {object} string "输入参数不能为空"
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
@@ -110,7 +112,7 @@ func PerfectDish(c *gin.Context) {
 // @Description 根据菜品名称模糊搜索菜品信息
 // @Produce json
 // @Param name query string true "菜品名称"
-// @Success 200 {array} models.Dish "Dish"
+// @Success 200 {array} interface{} "Dish"
 // @Failure 400 {object} string "请求参数不能为空"
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
@@ -124,4 +126,30 @@ func FuzzyDish(c *gin.Context) {
 	var values []models.Dish
 	err := dao.FuzzyMatch(name, &values, "Comments")
 	findCheck(c, values, err)
+}
+
+// DeleteDish 根据 id 删除指定菜品,及其评论
+// @Tags 菜品管理
+// @Summary 根据 id 删除指定菜品,及其评论
+// @Description 根据 id 删除指定菜品,及其评论
+// @Produce json
+// @Param id query int true "菜品id"
+// @Success 200 {object} string "删除成功"
+// @Success 400 {object} string "输入非法"
+// @Success 500 {object} string "删除失败"
+// @Router /dish [delete]
+func DeleteDish(c *gin.Context) {
+
+	id, err := strconv.Atoi(c.Query("id"))
+	if id == 0 || err != nil {
+		c.JSON(400, "输入非法")
+		return
+	}
+
+	d := models.Dish{
+		Model: gorm.Model{ID: uint(id)}}
+	//永久删除菜品，选择级联硬删除
+	err = dao.Del(&d, 3)
+	delCheck(c, err)
+
 }
