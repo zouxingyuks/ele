@@ -42,13 +42,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -80,13 +80,13 @@ const docTemplate = `{
                     "200": {
                         "description": "OrderDetailResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -116,13 +116,13 @@ const docTemplate = `{
                     "204": {
                         "description": "succeed",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -154,13 +154,13 @@ const docTemplate = `{
                     "204": {
                         "description": "接单成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -192,13 +192,13 @@ const docTemplate = `{
                     "204": {
                         "description": "订单完成",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -257,19 +257,19 @@ const docTemplate = `{
                     "200": {
                         "description": "添加成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
-                        "description": "添加失败",
-                        "schema": {
-                            "$ref": "#/definitions/models.Response"
-                        }
-                    },
-                    "401": {
                         "description": "输入非法",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "添加失败",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -298,7 +298,28 @@ const docTemplate = `{
                     "200": {
                         "description": "Dish",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Dish"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "请求参数不能为空",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "请求资源不存在",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "查询失败",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -316,15 +337,24 @@ const docTemplate = `{
                 "summary": "列出所有菜品",
                 "responses": {
                     "200": {
-                        "description": "获取成功",
+                        "description": "Dish",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Dish"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "资源未找到",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "500": {
-                        "description": "ErrorResponse",
+                        "description": "查询失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -352,26 +382,71 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "所属餐厅id",
                         "name": "merchantID",
-                        "in": "formData"
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Dish",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Dish"
+                            }
                         }
                     },
                     "400": {
-                        "description": "ErrorResponse",
+                        "description": "输入参数不能为空",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "请求资源不存在",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "500": {
-                        "description": "ErrorResponse",
+                        "description": "查询失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/merchant": {
+            "delete": {
+                "description": "根据 id 删除指定商家",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "商家管理"
+                ],
+                "summary": "根据 id 删除指定商家",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "商家id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功",
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    "400": {
+                        "description": "删除失败",
+                        "schema": {
+                            "type": "object"
                         }
                     }
                 }
@@ -417,19 +492,19 @@ const docTemplate = `{
                     "200": {
                         "description": "添加成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "$ref": "#/definitions/models.Merchant"
                         }
                     },
                     "400": {
                         "description": "添加失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "401": {
                         "description": "输入非法",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -456,9 +531,30 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Merchant",
+                        "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Merchant"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "输入非法",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "资源未找到",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "查询失败",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -476,22 +572,31 @@ const docTemplate = `{
                 "summary": "列出所有商家",
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Merchant"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "资源未找到",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "500": {
-                        "description": "ErrorResponse",
+                        "description": "查询失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
             }
         },
         "/merchant/perfect": {
-            "get": {
+            "post": {
                 "description": "根据商家名称获取商家信息",
                 "produces": [
                     "application/json"
@@ -511,21 +616,30 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Merchant",
+                        "description": "获取成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Merchant"
+                            }
                         }
                     },
                     "400": {
-                        "description": "ErrorResponse",
+                        "description": "输入非法",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "资源未找到",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "500": {
-                        "description": "ErrorResponse",
+                        "description": "查询失败",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -542,13 +656,13 @@ const docTemplate = `{
                     "200": {
                         "description": "succeed",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -577,19 +691,19 @@ const docTemplate = `{
                     "200": {
                         "description": "Order",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -620,19 +734,19 @@ const docTemplate = `{
                     "200": {
                         "description": "User",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -663,19 +777,19 @@ const docTemplate = `{
                     "200": {
                         "description": "User",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -692,13 +806,13 @@ const docTemplate = `{
                     "204": {
                         "description": "退出成功",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     },
                     "500": {
                         "description": "ErrorResponse",
                         "schema": {
-                            "$ref": "#/definitions/models.Response"
+                            "type": "string"
                         }
                     }
                 }
@@ -706,14 +820,150 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Response": {
+        "models.Comment": {
             "type": "object",
             "properties": {
-                "data": {
-                    "description": "响应数据"
+                "content": {
+                    "description": "评论内容",
+                    "type": "string"
                 },
-                "msg": {
-                    "description": "响应消息",
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string"
+                        },
+                        "valid": {
+                            "description": "Valid is true if Time is not NULL",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "dishID": {
+                    "description": "评论所属菜品id",
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "score": {
+                    "description": "评论评分",
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Dish": {
+            "type": "object",
+            "required": [
+                "description",
+                "merchantID",
+                "name",
+                "picture",
+                "price"
+            ],
+            "properties": {
+                "comments": {
+                    "description": "一个菜品有很多评价，使用外键关联",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Comment"
+                    }
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string"
+                        },
+                        "valid": {
+                            "description": "Valid is true if Time is not NULL",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "description": {
+                    "description": "菜品描述",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "merchantID": {
+                    "description": "所属餐厅id",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "菜品名称",
+                    "type": "string"
+                },
+                "picture": {
+                    "description": "菜品图片",
+                    "type": "string"
+                },
+                "price": {
+                    "description": "菜品价格",
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Merchant": {
+            "type": "object",
+            "required": [
+                "address",
+                "name",
+                "phone"
+            ],
+            "properties": {
+                "address": {
+                    "description": "餐厅地址",
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "object",
+                    "properties": {
+                        "time": {
+                            "type": "string"
+                        },
+                        "valid": {
+                            "description": "Valid is true if Time is not NULL",
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "dishes": {
+                    "description": "一个餐厅有多个菜品，使用外键关联",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Dish"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "餐厅名称",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "餐厅电话",
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }

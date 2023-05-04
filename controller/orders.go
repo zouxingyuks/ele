@@ -7,9 +7,9 @@ import "github.com/gin-gonic/gin"
 // @Accept json
 // @Produce json
 // @Param order body string true "新订单信息"
-// @Success 200 {object} models.Response "Order"
-// @Failure 400 {object} models.Response "ErrorResponse"
-// @Failure 500 {object} models.Response "ErrorResponse"
+// @Success 200 {object} string "Order"
+// @Failure 400 {object} string "ErrorResponse"
+// @Failure 500 {object} string "ErrorResponse"
 // @Router /orders [post]
 func CreateOrder(c *gin.Context) {
 
@@ -18,8 +18,8 @@ func CreateOrder(c *gin.Context) {
 // @Summary 列出所有订单
 // @Description 获取所有订单列表
 // @Produce json
-// @Success 200 {object} models.Response "succeed"
-// @Failure 500 {object} models.Response "ErrorResponse"
+// @Success 200 {object} string "succeed"
+// @Failure 500 {object} string "ErrorResponse"
 // @Router /orders [get]
 func ListOrders(c *gin.Context) {
 
@@ -32,8 +32,8 @@ func ListOrders(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param order_id path int true "订单id"
-// @Success 200 {object} models.Response "OrderDetailResponse"
-// @Failure 400 {object} models.Response "ErrorResponse"
+// @Success 200 {object} string "OrderDetailResponse"
+// @Failure 400 {object} string "ErrorResponse"
 // @Router /api/v1/orders/{order_id} [get]
 func GetOrder(c *gin.Context) {
 
@@ -46,8 +46,8 @@ func GetOrder(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param order_id path int true "订单id"
-// @Success 204 {object} models.Response "succeed"
-// @Failure 400 {object} models.Response "ErrorResponse"
+// @Success 204 {object} string "succeed"
+// @Failure 400 {object} string "ErrorResponse"
 // @Router /api/v1/orders/{order_id} [delete]
 func CancelOrder(c *gin.Context) {
 

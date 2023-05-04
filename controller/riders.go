@@ -9,8 +9,8 @@ import "github.com/gin-gonic/gin"
 // @Accept json
 // @Produce json
 // @Param order_id path int true "订单id"
-// @Success 204 {object} models.Response "接单成功"
-// @Failure 400 {object} models.Response "ErrorResponse"
+// @Success 204 {object} string "接单成功"
+// @Failure 400 {object} string "ErrorResponse"
 // @Router /api/v1/riders/orders/{order_id}/accept [post]
 func AcceptOrder(c *gin.Context) {
 
@@ -23,8 +23,8 @@ func AcceptOrder(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param order_id path int true "订单id"
-// @Success 204 {object} models.Response "订单完成"
-// @Failure 400 {object} models.Response "ErrorResponse"
+// @Success 204 {object} string "订单完成"
+// @Failure 400 {object} string "ErrorResponse"
 // @Router /api/v1/riders/orders/{order_id}/complete [post]
 func CompleteOrder(c *gin.Context) {
 
