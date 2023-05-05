@@ -1,14 +1,12 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
 // 查询类数据的检查
 func findCheck[T any](c *gin.Context, values []T, err error) {
 	//查询失败
-	fmt.Println(err)
 	if err != nil && err.Error() != "" {
 		c.JSON(500, err)
 
