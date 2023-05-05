@@ -57,13 +57,7 @@ func AddDish(c *gin.Context) {
 	}
 	//所有校验通过
 	err = dao.Add(&d)
-	if err != nil {
-		c.JSON(500, err)
-		return
-	}
-	c.JSON(200, nil)
-	return
-
+	addCheck(c, err)
 }
 
 // ListDish 列出所有菜品

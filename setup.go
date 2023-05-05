@@ -12,7 +12,9 @@ func Bind() {
 	_ = tools.DB.AutoMigrate(models.Merchant{})
 	_ = tools.DB.AutoMigrate(models.Dish{})
 	_ = tools.DB.AutoMigrate(models.Comment{})
+	_ = tools.DB.AutoMigrate(models.Order{})
 	_ = tools.DB.AutoMigrate(models.Rider{})
+	_ = tools.DB.AutoMigrate(models.User{})
 }
 func main() {
 	tools.InitTools()
