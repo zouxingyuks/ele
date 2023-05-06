@@ -58,15 +58,15 @@ func AddDish(c *gin.Context) {
 }
 
 // UpdateDish 更新菜品信息
-// @Tags 商家管理
-// @Summary 更新商家信息
-// @Description 更新商家信息
+// @Tags 菜品管理
+// @Summary 更新菜品信息
+// @Description 更新菜品信息
 // @Accept multipart/form-data
 // @Produce multipart/json
 // @Param id formData int true "菜品 id"
 // @Param name formData string false "菜品名称"
 // @Param description formData string false "菜品描述"
-// @Param price formData float false "菜品价格"
+// @Param price formData float64 false "菜品价格"
 // @Param picture formData string false "菜品图片"
 // @Param phone formData string false "餐厅电话"
 // @Success 200 {object} interface{} "添加成功"
