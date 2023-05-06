@@ -45,10 +45,6 @@ func parseConfig() {
 			configLogs.Errorf("[error] Failed to parse config file. %s", err)
 		}
 	}
-
-	// 获取配置文件中的具体参数值
-
-	// todo 使用获取到的参数值执行后续操作
 }
 
 func loadDefaultConfig() {
