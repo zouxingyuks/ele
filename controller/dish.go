@@ -66,49 +66,41 @@ func AddDish(c *gin.Context) {
 // @Param id formData int true "菜品 id"
 // @Param name formData string false "菜品名称"
 // @Param description formData string false "菜品描述"
-// @Param price formData int true "菜品价格"
-
+// @Param price formData float false "菜品价格"
+// @Param picture formData string false "菜品图片"
 // @Param phone formData string false "餐厅电话"
 // @Success 200 {object} interface{} "添加成功"
 // @Success 400 {object} string "添加失败"
 // @Success 401 {object} string "输入非法"
-// @Router /merchants [put]
+// @Router /dishes [put]
 func UpdateDish(c *gin.Context) {
 	var (
-		m   models.Merchant
+		d   models.Dish
 		err error
 	)
-	_ = c.ShouldBind(&m)
+	_ = c.ShouldBind(&d)
 	//中文校验
-	if m.Name != "" {
-		err = tools.CheckChinese(&m.Name)
+	if d.Name != "" {
+		err = tools.CheckChinese(&d.Name)
 		if err != nil {
-			c.JSON(401, "店铺名称"+err.Error())
+			c.JSON(401, "菜品名称"+err.Error())
 			return
 
 		}
 	}
-	if m.Address != "" {
-		//中文校验
-		err = tools.CheckChinese(&m.Address)
+	//中文校验
+	if d.Description != "" {
+		err = tools.CheckChinese(&d.Description)
 		if err != nil {
-			c.JSON(401, m.Address+err.Error())
+			c.JSON(401, "菜品描述"+err.Error())
 			return
 
 		}
 	}
-	//手机号码校验
-	if m.Phone != "" {
-		err = tools.CheckPhoneNumber(&m.Phone)
-		if err != nil {
-			c.JSON(401, m.Phone+err.Error())
-			return
 
-		}
-	}
-	mOld := models.Merchant{ID: m.ID}
-	var values []models.Merchant
-	err = dao.PerfectMatch(&mOld, &values, "Dishes")
+	dOld := models.Dish{ID: d.ID}
+	var values []models.Dish
+	err = dao.PerfectMatch(&dOld, &values, "Dishes")
 	if err != nil && err.Error() != "" {
 		c.JSON(500, err)
 
@@ -118,17 +110,21 @@ func UpdateDish(c *gin.Context) {
 			c.JSON(404, "对应餐厅不存在")
 			return
 		}
-		mNew := values[0]
-		if m.Name != "" {
-			mNew.Name = m.Name
+		dNew := values[0]
+		if d.Name != "" {
+			dNew.Name = d.Name
 		}
-		if m.Phone != "" {
-			mNew.Phone = m.Phone
+		if d.Description != "" {
+			dNew.Description = d.Description
 		}
-		if m.Address != "" {
-			mNew.Address = m.Address
+		if d.Price != 0 {
+			dNew.Price = d.Price
 		}
-		err := dao.Update(&mNew)
+		if d.Picture != "" {
+			dNew.Picture = d.Picture
+		}
+
+		err := dao.Update(&dNew)
 		if err != nil {
 			//todo ????
 			return
