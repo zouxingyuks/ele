@@ -5,7 +5,6 @@ import (
 	"ele/tools"
 	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -25,7 +24,7 @@ import (
 // @Success 200 {object} string "添加成功"
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
-// @Router /dish/add [post]
+// @Router /dishes [post]
 func AddDish(c *gin.Context) {
 	var d models.Dish
 	c.ShouldBind(&d)
@@ -48,9 +47,7 @@ func AddDish(c *gin.Context) {
 	}
 	//店铺存在性检验
 	var merchants []models.Merchant
-	err = dao.PerfectMatch(&models.Merchant{
-		Model: gorm.Model{ID: d.MerchantID},
-	}, &merchants)
+	err = dao.PerfectMatch(&models.Merchant{ID: d.MerchantID}, &merchants)
 	if err != nil {
 		c.JSON(400, "餐厅不存在")
 		return
@@ -58,6 +55,87 @@ func AddDish(c *gin.Context) {
 	//所有校验通过
 	err = dao.Add(&d)
 	addCheck(c, err)
+}
+
+// UpdateDish 更新菜品信息
+// @Tags 商家管理
+// @Summary 更新商家信息
+// @Description 更新商家信息
+// @Accept multipart/form-data
+// @Produce multipart/json
+// @Param id formData int true "菜品 id"
+// @Param name formData string false "菜品名称"
+// @Param description formData string false "菜品描述"
+// @Param price formData int true "菜品价格"
+
+// @Param phone formData string false "餐厅电话"
+// @Success 200 {object} interface{} "添加成功"
+// @Success 400 {object} string "添加失败"
+// @Success 401 {object} string "输入非法"
+// @Router /merchants [put]
+func UpdateDish(c *gin.Context) {
+	var (
+		m   models.Merchant
+		err error
+	)
+	_ = c.ShouldBind(&m)
+	//中文校验
+	if m.Name != "" {
+		err = tools.CheckChinese(&m.Name)
+		if err != nil {
+			c.JSON(401, "店铺名称"+err.Error())
+			return
+
+		}
+	}
+	if m.Address != "" {
+		//中文校验
+		err = tools.CheckChinese(&m.Address)
+		if err != nil {
+			c.JSON(401, m.Address+err.Error())
+			return
+
+		}
+	}
+	//手机号码校验
+	if m.Phone != "" {
+		err = tools.CheckPhoneNumber(&m.Phone)
+		if err != nil {
+			c.JSON(401, m.Phone+err.Error())
+			return
+
+		}
+	}
+	mOld := models.Merchant{ID: m.ID}
+	var values []models.Merchant
+	err = dao.PerfectMatch(&mOld, &values, "Dishes")
+	if err != nil && err.Error() != "" {
+		c.JSON(500, err)
+
+	} else {
+		if len(values) == 0 {
+			//资源未找到
+			c.JSON(404, "对应餐厅不存在")
+			return
+		}
+		mNew := values[0]
+		if m.Name != "" {
+			mNew.Name = m.Name
+		}
+		if m.Phone != "" {
+			mNew.Phone = m.Phone
+		}
+		if m.Address != "" {
+			mNew.Address = m.Address
+		}
+		err := dao.Update(&mNew)
+		if err != nil {
+			//todo ????
+			return
+		}
+		c.JSON(200, nil)
+	}
+
 }
 
 // ListDish 列出所有菜品
@@ -68,7 +146,7 @@ func AddDish(c *gin.Context) {
 // @Success 200 {array} interface{} "Dish"
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
-// @Router /dish/list [get]
+// @Router /dishes [get]
 func ListDish(c *gin.Context) {
 	var values []models.Dish
 	err := dao.List(&values)
@@ -79,24 +157,27 @@ func ListDish(c *gin.Context) {
 // @Tags 菜品管理
 // @Summary 准确获取菜品信息
 // @Description 根据菜品名称准确获取菜品信息
-// @Produce json
-// @Param name formData string true "菜品名称"
-// @Param merchantID formData uint true "所属餐厅id"
+// @Produce application/json
+// @Param name query string true "菜品名称"
+// @Param merchantID query uint true "所属餐厅id"
 // @Success 200 {array} interface{} "Dish"
 // @Failure 400 {object} string "输入参数不能为空"
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
-// @Router /dish/perfect [post]
+// @Router /dishes/perfect [get]
 func PerfectDish(c *gin.Context) {
-	d := models.Dish{}
-	c.ShouldBind(&d)
+	d := models.Dish{
+		Name: c.Query("name"),
+	}
+	merchantID, err := strconv.Atoi(c.Query("merchantID"))
+	d.MerchantID = uint(merchantID)
 	if d.Name == "" || d.MerchantID == 0 {
 		c.JSON(400, "输入参数不能为空")
 		return
 	}
 
 	var values []models.Dish
-	err := dao.PerfectMatch(&d, &values, "Comments")
+	err = dao.PerfectMatch(&d, &values, "Comments")
 	findCheck(c, values, err)
 }
 
@@ -104,13 +185,13 @@ func PerfectDish(c *gin.Context) {
 // @Tags 菜品管理
 // @Summary 模糊搜索菜品信息
 // @Description 根据菜品名称模糊搜索菜品信息
-// @Produce json
+// @Produce application/json
 // @Param name query string true "菜品名称"
 // @Success 200 {array} interface{} "Dish"
 // @Failure 400 {object} string "请求参数不能为空"
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
-// @Router /dish/fuzzy [post]
+// @Router /dishes/fuzzy [get]
 func FuzzyDish(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {
@@ -131,7 +212,7 @@ func FuzzyDish(c *gin.Context) {
 // @Success 200 {object} string "删除成功"
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "删除失败"
-// @Router /dish [delete]
+// @Router /dishes [delete]
 func DeleteDish(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Query("id"))
@@ -140,8 +221,7 @@ func DeleteDish(c *gin.Context) {
 		return
 	}
 
-	d := models.Dish{
-		Model: gorm.Model{ID: uint(id)}}
+	d := models.Dish{ID: uint(id)}
 	//永久删除菜品，选择级联硬删除
 	err = dao.Del(&d, 3)
 	delCheck(c, err)

@@ -30,6 +30,10 @@ func Add[T any](m *T) error {
 	result := tools.DB.Create(&m)
 	return result.Error
 }
+func Update[T any](m *T) error {
+	result := tools.DB.Updates(&m)
+	return result.Error
+}
 
 // 列出所有数据
 func List[T any](values *T, preload ...string) (err error) {

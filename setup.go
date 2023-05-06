@@ -14,7 +14,7 @@ func Bind() {
 	_ = tools.DB.AutoMigrate(models.Comment{})
 	_ = tools.DB.AutoMigrate(models.Order{})
 	_ = tools.DB.AutoMigrate(models.Rider{})
-	_ = tools.DB.AutoMigrate(models.User{})
+	_ = tools.DB.AutoMigrate(models.Customer{})
 }
 func main() {
 	tools.InitTools()

@@ -4,7 +4,6 @@ import (
 	"ele/models"
 	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"strconv"
 	"strings"
 )
@@ -15,20 +14,18 @@ import (
 // @Description 用户创建新订单
 // @Accept multipart/form-data
 // @Produce application/json
-// @Param userID formData int true "下单用户"
+// @Param customerID formData int true "下单用户"
 // @Param dishes formData []int true "菜品列表"
 // @Success 200 {object} string "添加成功"
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
-// @Router /orders/add [post]
+// @Router /orders [post]
 func AddOrder(c *gin.Context) {
 	var o models.Order
 	c.ShouldBind(&o)
 	//用户存在性校验
-	var users []models.User
-	err := dao.PerfectMatch(&models.User{
-		Model: gorm.Model{ID: o.UserID},
-	}, &users)
+	var customers []models.Customer
+	err := dao.PerfectMatch(&models.Customer{ID: o.CustomerID}, &customers)
 	if err != nil {
 		c.JSON(400, "用户不存在")
 		return
@@ -39,9 +36,7 @@ func AddOrder(c *gin.Context) {
 	for _, str := range dishesStr {
 		id, err := strconv.Atoi(str)
 		var values []models.Dish
-		err = dao.PerfectMatch(&models.Dish{
-			Model: gorm.Model{ID: uint(id)},
-		}, &values)
+		err = dao.PerfectMatch(&models.Dish{ID: uint(id)}, &values)
 		if err != nil || len(values) == 0 {
 			c.JSON(400, "菜品 "+strconv.Itoa(id)+"不存在")
 			return
@@ -71,8 +66,7 @@ func DeleteOrder(c *gin.Context) {
 		return
 	}
 
-	o := models.Order{
-		Model: gorm.Model{ID: uint(id)}}
+	o := models.Order{ID: uint(id)}
 	//把订单标记为完成
 	err = dao.Del(&o, 0)
 	delCheck(c, err)
@@ -84,17 +78,22 @@ func DeleteOrder(c *gin.Context) {
 // @Summary 准确获取订单信息
 // @Description 根据 用户ID 或 订单ID 准确获取订单信息
 // @Produce json
-// @Param userID formData uint false "用户ID"
-// @Param orderID formData uint false "订单ID"
+// @Param customerID query uint false "用户ID"
+// @Param orderID query uint false "订单ID"
 // @Success 200 {array} interface{} "Order"
 // @Failure 400 {object} string "请求参数不能为空"
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
-// @Router /order/perfect [post]
+// @Router /order/perfect [get]
 func PerfectOrder(c *gin.Context) {
 	o := models.Order{}
+	customerID, _ := strconv.Atoi(c.Query("customerID"))
+	id, _ := strconv.Atoi(c.Query("orderID"))
+	o.CustomerID = uint(customerID)
+	o.ID = uint(id)
+
 	c.ShouldBind(&o)
-	if o.UserID == 0 || o.ID == 0 {
+	if o.CustomerID == 0 || o.ID == 0 {
 		c.JSON(400, "请求参数不能为空")
 		return
 	}

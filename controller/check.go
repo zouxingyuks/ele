@@ -38,3 +38,19 @@ func delCheck(c *gin.Context, err error) {
 	}
 	c.JSON(200, "删除成功")
 }
+func passwordCheck(c *gin.Context, input string, original string) {
+	//todo original 解密模式
+	if len(input) != len(original) {
+		c.JSON(401, "密码错误")
+		return
+	}
+	for k, v := range original {
+		if v != rune(input[k]) {
+			c.JSON(401, "密码错误")
+			return
+		}
+	}
+	//todo 返回token
+	c.JSON(200, "token还没确定用啥算法")
+	return
+}

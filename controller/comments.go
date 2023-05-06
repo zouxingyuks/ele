@@ -5,7 +5,6 @@ import (
 	"ele/tools"
 	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // AddComment 用户评价订单
@@ -17,12 +16,12 @@ import (
 // @Param comment formData string true "评价"
 // @Param score formData int true "评分(1-5)"
 // @Param dishID formData int  true "对应菜品"
-// @Param userID formData int  true "评论者"
+// @Param customerID formData int  true "评论者"
 // @Param orderID formData int  true "对应订单ID"
 // @Success 200 {object} string "添加成功"
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
-// @Router /comments/add [post]
+// @Router /comments [post]
 func AddComment(c *gin.Context) {
 	var comment models.Comment
 	c.ShouldBind(&comment)
@@ -40,7 +39,7 @@ func AddComment(c *gin.Context) {
 	//菜品存在性检验
 	var dishes []models.Dish
 	err = dao.PerfectMatch(&models.Dish{
-		Model: gorm.Model{ID: comment.DishID},
+		ID: comment.DishID,
 	}, &dishes)
 	if err != nil {
 		c.JSON(400, "菜品不存在")
@@ -49,7 +48,7 @@ func AddComment(c *gin.Context) {
 	//todo 是否进行订单存在性校验
 	var orders []models.Order
 	err = dao.PerfectMatch(&models.Order{
-		Model: gorm.Model{ID: comment.OrderID},
+		ID: comment.OrderID,
 	}, &orders)
 	if err != nil {
 		c.JSON(400, "订单不存在")
