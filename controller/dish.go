@@ -195,6 +195,7 @@ func FuzzyDish(c *gin.Context) {
 		return
 	}
 	var values []models.Dish
+	//todo sql 过滤
 	err := dao.FuzzyMatch(name, &values, "Comments")
 	findCheck(c, values, err)
 }
