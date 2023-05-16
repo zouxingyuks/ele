@@ -10,12 +10,26 @@ var api *gin.RouterGroup
 func LoadApi(v1 *gin.RouterGroup) {
 	api = v1
 	loadCustomer()
-	loadMerchant()
-	loadDish()
-	loadOrder()
-	loadComment()
-	// 骑手相关接口
-	api.POST("/riders/orders/:order_id", controller.AcceptOrder)            // 骑手接单
-	api.POST("/riders/orders/:order_id/complete", controller.CompleteOrder) // 骑手完成订单
+	loadCRUD("merchants")
+	loadCRUD("dishes")
+	loadCRUD("orders")
+	loadCRUD("comments")
+	loadCRUD("riders")
+}
+func loadCRUD(s string) {
+	crud := controller.NewController(s)
+	api.POST("/"+s, crud.Add)
+	api.PUT("/"+s, crud.Update)
+	api.GET("/"+s, crud.List)
+	api.GET("/"+s+"/perfect", crud.Perfect)
+	api.GET("/"+s+"/fuzzy", crud.Fuzzy)
+	api.DELETE("/"+s, crud.Delete)
 
+}
+
+// 客户类API
+func loadCustomer() {
+	loadCRUD("customers")
+	api.GET("/customers/login", controller.LoginCustomer)    // 用户登录
+	api.POST("/customers/logout", controller.LogoutCustomer) // 用户注销
 }

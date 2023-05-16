@@ -7,8 +7,15 @@
       <paths name="垃圾服务器">
         <serverdata>
           <mappings>
-            <mapping deploy="/ele" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/logs" />
+            <excludedPath local="true" path="$PROJECT_DIR$/.idea" />
+            <excludedPath local="true" path="$PROJECT_DIR$/.gitignore" />
+            <excludedPath local="true" path="$PROJECT_DIR$/tmp" />
+            <excludedPath local="true" path="$PROJECT_DIR$/configs" />
+          </excludedPaths>
         </serverdata>
       </paths>
       <paths name="阿里云">
