@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .custom-box {
+        @apply rounded-lg shadow-lg justify-between shadow-md m-2 p-4 overflow-auto fixed inset-x-0 flex-grow;
+    }
+
+    .custom-scrollbar {
+        @apply overflow-y-auto fixed inset-0;
+    }
+
+    .custom-header {
+        @apply bg-blue-400 custom-box fixed top-0 max-h-48 ;
+    }
+
+    .search-container {
+        @apply relative flex flex-col items-center justify-center bg-gray-100 w-full;
+    }
+
+
+    .search-input {
+        @apply w-full pl-10 pr-10 border-2 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-[#4cd96f] rounded-lg ml-2 py-2 bg-white text-blue-500 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    }
+
+    .search-button {
+        @apply absolute inset-y-0 right-0 flex items-center px-3 bg-gray-200 rounded-md;
+    }
+
+    .custom-list {
+        @apply custom-box bg-white custom-scrollbar justify-between items-center h-full sticky ;
+    }
+}
+.app {
+    @apply custom-box bg-white h-screen items-center mx-auto w-full flex-wrap justify-between ;
+}
+
+.navigation {
+    @apply fixed left-0 right-0 bottom-0 z-50 flex justify-between custom-box bg-white shadow-md sticky;
+}
+
+
+.navigation_item {
+    @apply flex flex-col items-center justify-center w-full h-full text-gray-600 ;
+}
+
+
+.index-footer_Gtduid {
+    @apply bg-[#4cd96f] text-white text-center py-3;
+}
+
+.card_list {
+    @apply custom-list ;
+}
+
+
+.order_card {
+    @apply bg-white rounded-lg shadow-lg shadow-md m-2 rounded-lg shadow-md p-4;
+}
+
+.order_card_merchant {
+    @apply mb-4 grid grid-cols-12 h-8 justify-items-center items-center;
+}
+
+.img_card_list {
+    @apply flex overflow-x-scroll w-auto h-full;
+}
+
+.img_card_list::-webkit-scrollbar {
+    display: none; /* 隐藏滚动条 - Chrome, Safari */
+}
+
+.img_card_list {
+    scrollbar-width: none; /* 隐藏滚动条 - Firefox */
+    -ms-overflow-style: none; /* 隐藏滚动条 - IE 10+ */
+}
+
+.img_card {
+    @apply w-20 h-20 rounded-lg m-2;
+}
+
+.index_searcher_container {
+    @apply search-container;
+}
+
+
+.custom_button {
+    @apply block bg-green-400 text-white w-full py-3 rounded-md text-center font-bold text-lg m-1;
+}
+
+.LoginHeader {
+    @apply text-3xl font-bold text-center mb-5;
+}
+
+.form-group {
+    @apply mb-5;
+}
+
+.form-input {
+    @apply w-full border-2 border-gray-300 rounded-md ;
+}
+
+.index_header {
+    @apply custom-header flex-row justify-between items-center sticky top-0 z-50;
+}
+
+
+.index-grid {
+    @apply custom-box grid grid-cols-5 grid-rows-2 gap-4 bg-white sticky;
+}
+
+
+.information {
+    @apply custom-box flex flex-row  justify-between bg-white items-center ;
+}
