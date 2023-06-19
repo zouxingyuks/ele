@@ -13,6 +13,7 @@ func Start() {
 	api := r.Group("/api/v1")
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	v1.LoadApi(api)
+	v1.LoadPages(r)
 	//fmt.Println(tools.Configs.GetString("Router.port"))
 	r.Run(":" + config.Configs.GetString("Router.port"))
 }
