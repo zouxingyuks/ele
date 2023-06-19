@@ -4,84 +4,169 @@
 
 @layer components {
     .custom-box {
-        @apply rounded-lg shadow-lg justify-between shadow-md m-2 p-4 overflow-auto fixed inset-x-0 flex-grow;
-    }
-
-    .custom-scrollbar {
-        @apply overflow-y-auto fixed inset-0;
+        @apply rounded-lg shadow-lg shadow-md m-2 p-4  fixed inset-x-0 flex-grow;
     }
 
     .custom-header {
-        @apply bg-blue-400 custom-box fixed top-0 max-h-48 ;
+        @apply custom-box fixed left-0 right-0 top-0 z-50 flex-row justify-between bg-blue-400  sticky ;
     }
 
-    .search-container {
-        @apply relative flex flex-col items-center justify-center bg-gray-100 w-full;
-    }
-
-
-    .search-input {
-        @apply w-full pl-10 pr-10 border-2 border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:border-[#4cd96f] rounded-lg ml-2 py-2 bg-white text-blue-500 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-    }
-
-    .search-button {
-        @apply absolute inset-y-0 right-0 flex items-center px-3 bg-gray-200 rounded-md;
-    }
 
     .custom-list {
-        @apply custom-box bg-white custom-scrollbar justify-between items-center h-full sticky ;
+        @apply custom-box bg-white h-2/3  justify-between items-center  relative overflow-auto;
     }
 }
+/*normal css*/
 .app {
-    @apply custom-box bg-white h-screen items-center mx-auto w-full flex-wrap justify-between ;
+    @apply custom-box bg-white h-screen items-center mx-auto w-full flex-row justify-between;
 }
 
 .navigation {
-    @apply fixed left-0 right-0 bottom-0 z-50 flex justify-between custom-box bg-white shadow-md sticky;
+    @apply fixed left-0 right-0 bottom-0 z-50 flex justify-between custom-box bg-white  sticky ;
+    height: 10%;
 }
-
 
 .navigation_item {
-    @apply flex flex-col items-center justify-center w-full h-full text-gray-600 ;
+    @apply flex flex-col items-center justify-center w-full h-full text-gray-600;
 }
 
+
+/*index css*/
+.index-app {
+    @apply app ;
+    height: 100%;
+}
+
+.index-header {
+    @apply custom-header ;
+    height: 8%;
+}
+
+.index-grid {
+    @apply custom-box grid grid-cols-5 grid-rows-2 gap-4 bg-white sticky items-center justify-items-center;
+    height: 15%;
+}
+
+.grid-item-img img {
+    width: 40px;
+    height: 40px;
+}
+
+.index-banner {
+    @apply custom-box bg-gray-100 p-6 rounded-lg  sticky items-center justify-items-center;
+    height: 17%;
+}
+
+.index-banner-content {
+    @apply flex flex-col items-center justify-items-center  w-full text-center;
+}
+
+.index-banner-img {
+    @apply right-0 mt-4 w-auto h-auto;
+}
+
+
+.index-list {
+    @apply custom-list ;
+    height: 50%;
+}
 
 .index-footer_Gtduid {
     @apply bg-[#4cd96f] text-white text-center py-3;
 }
 
-.card_list {
-    @apply custom-list ;
+/*order css*/
+
+.order-header {
+    @apply custom-header;
+    height: 5%;
 }
 
+.order-title {
+    @apply flex flex-col  items-center justify-center;
+}
+
+.order-information {
+    @apply custom-box  flex-row justify-between bg-white items-center  overflow-auto sticky;
+    height: 80%;
+}
+
+.order-total {
+    @apply custom-box fixed inset-x-0 bottom-0 justify-between items-stretch flex p-0 sticky;
+    height: 10%;
+}
+
+.order_list {
+    @apply custom-list ;
+    height: 85%;
+}
 
 .order_card {
-    @apply bg-white rounded-lg shadow-lg shadow-md m-2 rounded-lg shadow-md p-4;
+    @apply bg-white rounded-lg shadow-lg shadow-md m-2 p-4;
 }
 
 .order_card_merchant {
     @apply mb-4 grid grid-cols-12 h-8 justify-items-center items-center;
 }
 
+/*merchant css*/
+
+.merchant-header {
+    @apply custom-header ;
+    height: 5%;
+}
+
+.merchant-list {
+    @apply custom-list ;
+    height: 85%;
+}
+
+.merchant-card {
+    @apply bg-white rounded-lg shadow-lg shadow-md m-2 p-4 flex flex-row items-stretch justify-between h-40;
+}
+
+.merchant-card-content {
+    @apply flex flex-col items-start justify-items-center  bg-gray-100 p-6 rounded-lg w-full text-center;
+}
+
+.merchant-card-img {
+    @apply w-auto h-auto m-2  flex flex-row  rounded-lg m-2;
+}
+
+.merchant-information {
+    @apply custom-box  flex-row justify-between bg-white items-center  overflow-auto sticky;
+    height: 40%;
+}
+
+/*dish css*/
+.dish-list {
+    @apply custom-list ;
+    height: 45%;
+}
+
+.dish-card {
+    @apply bg-white rounded-lg shadow-lg shadow-md m-2 p-4 flex flex-row items-stretch justify-between h-40;
+}
+
+
 .img_card_list {
     @apply flex overflow-x-scroll w-auto h-full;
-}
-
-.img_card_list::-webkit-scrollbar {
-    display: none; /* 隐藏滚动条 - Chrome, Safari */
-}
-
-.img_card_list {
-    scrollbar-width: none; /* 隐藏滚动条 - Firefox */
-    -ms-overflow-style: none; /* 隐藏滚动条 - IE 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .img_card {
     @apply w-20 h-20 rounded-lg m-2;
 }
 
-.index_searcher_container {
-    @apply search-container;
+/*search css*/
+
+.search-container {
+    @apply relative flex flex-row items-center justify-center bg-gray-100 w-full;
+}
+
+.search-input {
+    @apply w-fit border-2 border-gray-300 rounded-md items-center justify-items-center;
 }
 
 
@@ -98,19 +183,6 @@
 }
 
 .form-input {
-    @apply w-full border-2 border-gray-300 rounded-md ;
+    @apply w-full border-2 border-gray-300 rounded-md;
 }
 
-.index_header {
-    @apply custom-header flex-row justify-between items-center sticky top-0 z-50;
-}
-
-
-.index-grid {
-    @apply custom-box grid grid-cols-5 grid-rows-2 gap-4 bg-white sticky;
-}
-
-
-.information {
-    @apply custom-box flex flex-row  justify-between bg-white items-center ;
-}
