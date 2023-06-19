@@ -7,7 +7,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/zouxingyuks/tools"
 	"github.com/zouxingyuks/tools/config"
-	"github.com/zouxingyuks/tools/log"
 )
 
 // @title 饿了么项目复刻
@@ -28,7 +27,7 @@ var configLog *logrus.Entry
 
 func init() {
 	tools.InitTools()
-	configLog = log.NewLog("config")
+	configLog = config.NewLog("config")
 }
 func main() {
 	config.Configs.WatchConfig()

@@ -30,6 +30,6 @@ func loadCRUD(s string) {
 // 客户类API
 func loadCustomer() {
 	loadCRUD("customers")
-	api.GET("/customers/login", controller.LoginCustomer)    // 用户登录
+	api.POST("/customers/login", controller.LoginCustomer)   // 用户登录
 	api.POST("/customers/logout", controller.LogoutCustomer) // 用户注销
 }

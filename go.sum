@@ -269,6 +269,8 @@ github.com/zouxingyuks/tools v1.0.2-0.20230516043801-70a62aece31c h1:SnLNn9Hc66f
 github.com/zouxingyuks/tools v1.0.2-0.20230516043801-70a62aece31c/go.mod h1:N68wPDoAIo9FWFGZSoIVGcA0qF1G/tdQZL5HQGih/nM=
 github.com/zouxingyuks/tools v1.0.2-0.20230516050706-7de9d357dc82 h1:1y/jF/b4Uk7i90rCPGchMfOXQ46mPZ8CGHdOA+UptSc=
 github.com/zouxingyuks/tools v1.0.2-0.20230516050706-7de9d357dc82/go.mod h1:N68wPDoAIo9FWFGZSoIVGcA0qF1G/tdQZL5HQGih/nM=
+github.com/zouxingyuks/tools v1.0.2-0.20230601041534-74110e310802 h1:HWOC6hDmvrRvujwPJ90PaTuCRCukGllKK8uYve4SgKI=
+github.com/zouxingyuks/tools v1.0.2-0.20230601041534-74110e310802/go.mod h1:N68wPDoAIo9FWFGZSoIVGcA0qF1G/tdQZL5HQGih/nM=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
 go.opencensus.io v0.22.2/go.mod h1:yxeiOL68Rb0Xd1ddK5vPZ/oVn4vY4Ynel7k9FzqtOIw=

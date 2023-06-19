@@ -59,17 +59,17 @@ func (customer Customer) Fuzzy(c *gin.Context) {
 func (customer Customer) Add(c *gin.Context) {
 	c.ShouldBind(&customer)
 	//姓名中文校验
-	if check.CheckChinese(&customer.Username) {
+	if !check.CheckChinese(&customer.Username) {
 		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 	}
 	//地址中文校验
-	if check.CheckChinese(&customer.Address) {
+	if !check.CheckChinese(&customer.Address) {
 		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 	}
 	//手机号码校验
-	if check.CheckPhoneNumber(&customer.Phone) {
+	if !check.CheckPhoneNumber(&customer.Phone) {
 		c.JSON(400, "手机号码输入非法")
 		return
 
@@ -86,31 +86,31 @@ func (customer Customer) Add(c *gin.Context) {
 // @Description 用户使用用户名和密码登录
 // @Accept multipart/form-data
 // @Produce application/json
-// @Param phone query string true "手机号"
-// @Param password query string true "密码" format(password)
+// @Param phone formData string true "手机号"
+// @Param password formData string true "密码" format(password)
 // @Success 200 {object} string "添加成功"
 // @Success 400 {object} string "输入非法"
 // @Success 401 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
-// @Router /customers/login [get]
+// @Router /customers/login [post]
 func LoginCustomer(c *gin.Context) {
 	var (
 		u        Customer
 		values   []Customer
 		password string
 	)
-	u.Phone = c.Query("phone")
-	password = c.Query("password")
+	u.Phone = c.PostForm("phone")
+	password = c.PostForm("password")
 	if u.Phone == "" || password == "" {
 		c.JSON(400, "输入参数不能为空")
 		return
 	}
 	//手机号有效性检验
-	if check.CheckPhoneNumber(&u.Phone) {
+	if !check.CheckPhoneNumber(&u.Phone) {
 		c.JSON(400, "手机号码校验非法")
 		return
-
 	}
+
 	//对应账户查询
 	err := dao.PerfectMatch(&u, &values)
 	if err != nil && err.Error() != "" {

@@ -10,7 +10,7 @@ require (
 	github.com/swaggo/files v1.0.1
 	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.1
-	github.com/zouxingyuks/tools v1.0.2-0.20230516050706-7de9d357dc82
+	github.com/zouxingyuks/tools v1.0.2-0.20230601041534-74110e310802
 	gorm.io/gorm v1.25.1
 )
 

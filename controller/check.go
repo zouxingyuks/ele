@@ -51,6 +51,8 @@ func passwordCheck(c *gin.Context, input string, original string) {
 		}
 	}
 	//todo 返回token
-	c.JSON(200, "token还没确定用啥算法")
+	//c.JSON(200, "token还没确定用啥算法")
+	c.Redirect(302, "/")
+
 	return
 }
