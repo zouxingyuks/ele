@@ -3,9 +3,10 @@ package main
 import (
 	_ "ele/docs" // 千万不要忘了导入把你上一步生成的docs
 	"ele/router"
-	"ele/tools"
 	"github.com/fsnotify/fsnotify"
 	"github.com/sirupsen/logrus"
+	"github.com/zouxingyuks/tools"
+	"github.com/zouxingyuks/tools/config"
 )
 
 // @title 饿了么项目复刻
@@ -26,11 +27,11 @@ var configLog *logrus.Entry
 
 func init() {
 	tools.InitTools()
-	configLog = tools.NewLog("config")
+	configLog = config.NewLog("config")
 }
 func main() {
-	tools.Configs.WatchConfig()
-	tools.Configs.OnConfigChange(func(e fsnotify.Event) {
+	config.Configs.WatchConfig()
+	config.Configs.OnConfigChange(func(e fsnotify.Event) {
 		// 配置文件发生变更之后会调用的回调函数
 		configLog.Infoln("Config file changed:", e.Name)
 	})

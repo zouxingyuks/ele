@@ -1,16 +1,32 @@
 package controller
 
 import (
-	"ele/models"
-	"ele/tools"
-	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
+	"github.com/zouxingyuks/tools/check"
+	"github.com/zouxingyuks/tools/dao"
+	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
+
+// Dish 菜品
+type Dish struct {
+	ID          uint `gorm:"primarykey" json:"id,omitempty" form:"id" binding:"required"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	Name        string         `gorm:"type:varchar(255);comment:菜品名称" json:"name,omitempty" form:"name" binding:"required"`       // 菜品名称
+	Description string         `gorm:"type:text;comment:菜品描述" json:"description,omitempty" form:"description" binding:"required"` // 菜品描述
+	Price       float64        `gorm:"type:double;comment:菜品价格" json:"price,omitempty" form:"price" binding:"required"`           // 菜品价格
+	//todo 图片改成数组，一个菜品可以有多张图片
+	Picture    string    `gorm:"type:varchar(255);comment:菜品图片" json:"picture,omitempty" form:"picture" binding:"required"` // 菜品图片
+	MerchantID uint      `gorm:"comment:所属餐厅id" json:"merchantID,omitempty" form:"merchantID" binding:"required"`           // 所属餐厅id
+	Comments   []Comment // 一个菜品有很多评价，使用外键关联
+}
 
 //todo 提示信息大修
 
-// AddDish 添加菜品
+// Add 添加菜品
 // @Tags 菜品管理
 // @Summary 添加菜品
 // @Description 添加菜品
@@ -25,29 +41,26 @@ import (
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
 // @Router /dishes [post]
-func AddDish(c *gin.Context) {
-	var d models.Dish
+func (d Dish) Add(c *gin.Context) {
 	c.ShouldBind(&d)
 	//中文校验
 
-	err := tools.CheckChinese(&d.Name)
-	if err != nil {
-		c.JSON(400, "菜品名称"+err.Error())
+	if check.CheckChinese(&d.Name) {
+		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 
 	}
 	//todo 价格限定
 	//todo 图片扫描
 	//中文校验
-	err = tools.CheckChinese(&d.Description)
-	if err != nil {
-		c.JSON(400, d.Description+err.Error())
+	if check.CheckChinese(&d.Description) {
+		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 
 	}
 	//店铺存在性检验
-	var merchants []models.Merchant
-	err = dao.PerfectMatch(&models.Merchant{ID: d.MerchantID}, &merchants)
+	var merchants []Merchant
+	err := dao.PerfectMatch(&Merchant{ID: d.MerchantID}, &merchants)
 	if err != nil {
 		c.JSON(400, "餐厅不存在")
 		return
@@ -57,7 +70,7 @@ func AddDish(c *gin.Context) {
 	addCheck(c, err)
 }
 
-// UpdateDish 更新菜品信息
+// Update 更新菜品信息
 // @Tags 菜品管理
 // @Summary 更新菜品信息
 // @Description 更新菜品信息
@@ -73,33 +86,30 @@ func AddDish(c *gin.Context) {
 // @Success 400 {object} string "添加失败"
 // @Success 401 {object} string "输入非法"
 // @Router /dishes [put]
-func UpdateDish(c *gin.Context) {
+func (d Dish) Update(c *gin.Context) {
 	var (
-		d   models.Dish
 		err error
 	)
 	_ = c.ShouldBind(&d)
 	//中文校验
 	if d.Name != "" {
-		err = tools.CheckChinese(&d.Name)
-		if err != nil {
-			c.JSON(401, "菜品名称"+err.Error())
+		if check.CheckChinese(&d.Name) {
+			c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 			return
 
 		}
 	}
 	//中文校验
 	if d.Description != "" {
-		err = tools.CheckChinese(&d.Description)
-		if err != nil {
-			c.JSON(401, "菜品描述"+err.Error())
+		if check.CheckChinese(&d.Description) {
+			c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 			return
 
 		}
 	}
 
-	dOld := models.Dish{ID: d.ID}
-	var values []models.Dish
+	dOld := Dish{ID: d.ID}
+	var values []Dish
 	err = dao.PerfectMatch(&dOld, &values, "Dishes")
 	if err != nil && err.Error() != "" {
 		c.JSON(500, err)
@@ -134,7 +144,7 @@ func UpdateDish(c *gin.Context) {
 
 }
 
-// ListDish 列出所有菜品
+// List 列出所有菜品
 // @Tags 菜品管理
 // @Summary 列出所有菜品
 // @Description 获取所有菜品列表
@@ -143,13 +153,13 @@ func UpdateDish(c *gin.Context) {
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /dishes [get]
-func ListDish(c *gin.Context) {
-	var values []models.Dish
+func (d Dish) List(c *gin.Context) {
+	var values []Dish
 	err := dao.List(&values)
 	findCheck(c, values, err)
 }
 
-// PerfectDish 准确获取菜品信息
+// Perfect 准确获取菜品信息
 // @Tags 菜品管理
 // @Summary 准确获取菜品信息
 // @Description 根据菜品名称准确获取菜品信息
@@ -161,8 +171,8 @@ func ListDish(c *gin.Context) {
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
 // @Router /dishes/perfect [get]
-func PerfectDish(c *gin.Context) {
-	d := models.Dish{
+func (d Dish) Perfect(c *gin.Context) {
+	d = Dish{
 		Name: c.Query("name"),
 	}
 	merchantID, err := strconv.Atoi(c.Query("merchantID"))
@@ -172,12 +182,12 @@ func PerfectDish(c *gin.Context) {
 		return
 	}
 
-	var values []models.Dish
+	var values []Dish
 	err = dao.PerfectMatch(&d, &values, "Comments")
 	findCheck(c, values, err)
 }
 
-// FuzzyDish 模糊搜索菜品信息
+// Fuzzy 模糊搜索菜品信息
 // @Tags 菜品管理
 // @Summary 模糊搜索菜品信息
 // @Description 根据菜品名称模糊搜索菜品信息
@@ -188,18 +198,19 @@ func PerfectDish(c *gin.Context) {
 // @Failure 404 {object} string "请求资源不存在"
 // @Failure 500 {object} string "查询失败"
 // @Router /dishes/fuzzy [get]
-func FuzzyDish(c *gin.Context) {
+func (d Dish) Fuzzy(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(400, "请求参数不能为空")
 		return
 	}
-	var values []models.Dish
+	var values []Dish
+	//todo sql 过滤
 	err := dao.FuzzyMatch(name, &values, "Comments")
 	findCheck(c, values, err)
 }
 
-// DeleteDish 根据 id 删除指定菜品,及其评论
+// Delete 根据 id 删除指定菜品,及其评论
 // @Tags 菜品管理
 // @Summary 根据 id 删除指定菜品,及其评论
 // @Description 根据 id 删除指定菜品,及其评论
@@ -209,7 +220,7 @@ func FuzzyDish(c *gin.Context) {
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "删除失败"
 // @Router /dishes [delete]
-func DeleteDish(c *gin.Context) {
+func (d Dish) Delete(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Query("id"))
 	if id == 0 || err != nil {
@@ -217,7 +228,7 @@ func DeleteDish(c *gin.Context) {
 		return
 	}
 
-	d := models.Dish{ID: uint(id)}
+	d = Dish{ID: uint(id)}
 	//永久删除菜品，选择级联硬删除
 	err = dao.Del(&d, 3)
 	delCheck(c, err)

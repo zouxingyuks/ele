@@ -2,10 +2,10 @@ package router
 
 import (
 	"ele/router/v1"
-	"ele/tools"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	gs "github.com/swaggo/gin-swagger"
+	"github.com/zouxingyuks/tools/config"
 )
 
 func Start() {
@@ -13,6 +13,7 @@ func Start() {
 	api := r.Group("/api/v1")
 	r.GET("/swagger/*any", gs.WrapHandler(swaggerFiles.Handler))
 	v1.LoadApi(api)
+	v1.LoadPages(r)
 	//fmt.Println(tools.Configs.GetString("Router.port"))
-	r.Run(":" + tools.Configs.GetString("Router.port"))
+	r.Run(":" + config.Configs.GetString("Router.port"))
 }

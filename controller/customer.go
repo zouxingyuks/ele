@@ -1,14 +1,48 @@
 package controller
 
 import (
-	"ele/models"
-	"ele/tools"
-	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
+	"github.com/zouxingyuks/tools/check"
+	"github.com/zouxingyuks/tools/dao"
+	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
 
-// AddCustomer 添加用户
+type Customer struct {
+	ID        uint `gorm:"primarykey" json:"id,omitempty" form:"id" binding:"required"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	Username  string         `gorm:"type:varchar(255);comment:用户名" json:"username,omitempty" form:"username" binding:"required"` // 用户名
+	Password  string         `gorm:"type:varchar(255);comment:密码" json:"password,omitempty" form:"password" binding:"required"`  // 密码
+	Phone     string         `gorm:"type:varchar(20);comment:手机号;unique" json:"phone,omitempty" form:"phone" binding:"required"` // 手机号
+	Address   string         `gorm:"type:varchar(255);comment:用户地址" json:"address,omitempty" form:"address" binding:"required"`  // 用户地址
+	Orders    []Order        // 一个用户有多个订单，使用外键关联
+	Favorites []Dish         `gorm:"many2many:favorite_dishes;"` // 一个用户有多个收藏菜品，使用多对多关联
+}
+
+func (customer Customer) Update(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (customer Customer) List(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (customer Customer) Perfect(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (customer Customer) Fuzzy(c *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+// Add 添加用户
 // @Summary 添加用户
 // @Description 添加用户
 // @Tags 用户管理
@@ -22,32 +56,27 @@ import (
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
 // @Router /customers [post]
-func AddCustomer(c *gin.Context) {
-	var u models.Customer
-	c.ShouldBind(&u)
+func (customer Customer) Add(c *gin.Context) {
+	c.ShouldBind(&customer)
 	//姓名中文校验
-	err := tools.CheckChinese(&u.Username)
-	if err != nil {
-		c.JSON(400, "用户名"+err.Error())
+	if !check.CheckChinese(&customer.Username) {
+		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 	}
 	//地址中文校验
-	err = tools.CheckChinese(&u.Address)
-	if err != nil {
-		c.JSON(400, "用户地址"+err.Error())
+	if !check.CheckChinese(&customer.Address) {
+		c.JSON(400, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 	}
 	//手机号码校验
-	//手机号码校验
-	err = tools.CheckPhoneNumber(&u.Phone)
-	if err != nil {
-		c.JSON(400, u.Phone+err.Error())
+	if !check.CheckPhoneNumber(&customer.Phone) {
+		c.JSON(400, "手机号码输入非法")
 		return
 
 	}
 	//todo 密码加密
 	//所有校验通过
-	err = dao.Add(&u)
+	err := dao.Add(&customer)
 	addCheck(c, err)
 }
 
@@ -57,34 +86,33 @@ func AddCustomer(c *gin.Context) {
 // @Description 用户使用用户名和密码登录
 // @Accept multipart/form-data
 // @Produce application/json
-// @Param phone query string true "手机号"
-// @Param password query string true "密码" format(password)
+// @Param phone formData string true "手机号"
+// @Param password formData string true "密码" format(password)
 // @Success 200 {object} string "添加成功"
 // @Success 400 {object} string "输入非法"
 // @Success 401 {object} string "输入非法"
 // @Success 500 {object} string "添加失败"
-// @Router /customers/login [get]
+// @Router /customers/login [post]
 func LoginCustomer(c *gin.Context) {
 	var (
-		u        models.Customer
-		values   []models.Customer
+		u        Customer
+		values   []Customer
 		password string
 	)
-	u.Phone = c.Query("phone")
-	password = c.Query("password")
+	u.Phone = c.PostForm("phone")
+	password = c.PostForm("password")
 	if u.Phone == "" || password == "" {
 		c.JSON(400, "输入参数不能为空")
 		return
 	}
 	//手机号有效性检验
-	err := tools.CheckPhoneNumber(&u.Phone)
-	if err != nil {
-		c.JSON(400, u.Phone+err.Error())
+	if !check.CheckPhoneNumber(&u.Phone) {
+		c.JSON(400, "手机号码校验非法")
 		return
-
 	}
+
 	//对应账户查询
-	err = dao.PerfectMatch(&u, &values)
+	err := dao.PerfectMatch(&u, &values)
 	if err != nil && err.Error() != "" {
 		c.JSON(500, err)
 
@@ -110,7 +138,7 @@ func LogoutCustomer(c *gin.Context) {
 
 }
 
-// DeleteCustomer 根据 id 删除指定用户，及其相关信息
+// Delete 根据 id 删除指定用户，及其相关信息
 // @Tags 用户管理
 // @Summary 根据 id 删除指定用户，及其相关信息
 // @Description 根据 id 删除指定用户，及其相关信息，包括其订单和收藏的菜品
@@ -120,7 +148,7 @@ func LogoutCustomer(c *gin.Context) {
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "删除失败"
 // @Router /customer [delete]
-func DeleteCustomer(c *gin.Context) {
+func (customer Customer) Delete(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Query("id"))
 	if id == 0 || err != nil {
@@ -128,7 +156,7 @@ func DeleteCustomer(c *gin.Context) {
 		return
 	}
 
-	customer := models.Customer{
+	customer = Customer{
 		ID: uint(id),
 	}
 	//级联删除用户信息，包括其订单和收藏的菜品

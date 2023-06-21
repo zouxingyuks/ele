@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link href="/assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="app">
+    <img src="/assets/images/LoginHeader.png" class="LoginHeader" alt="logo" width="100" height="100">
+    <form class="text-3xl" action="{{.api.customers.login}}" method="POST">
+        <div class="form-group">
+            <input class="form-input" type="tel" maxlength="11" id="phone" name="phone" required placeholder="手机号">
+        </div>
+
+        <div class="form-group">
+            <input class="form-input" type="password" id="password" name="password" required placeholder="密码">
+        </div>
+
+        <div class="flex flex-row">
+            <button class="custom_button" type="submit">登录</button>
+            <button class="custom_button" type="button" onclick="redirectToRegistration()">注册</button>
+
+        </div>
+
+    </form>
+</div>
+
+<script>
+    function redirectToRegistration() {
+        window.location.href = "/register"; // 替换为你的注册页面的 URL
+    }
+</script>
+</body>
+</html>

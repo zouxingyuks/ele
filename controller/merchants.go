@@ -1,14 +1,28 @@
 package controller
 
 import (
-	"ele/models"
-	"ele/tools"
-	"ele/tools/dao"
 	"github.com/gin-gonic/gin"
+	"github.com/zouxingyuks/tools/check"
+	"github.com/zouxingyuks/tools/dao"
+	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
 
-// AddMerchant 添加商家
+// Merchant 餐厅
+type Merchant struct {
+	ID        uint `gorm:"primarykey" json:"id,omitempty" form:"id" binding:"required"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
+	Name      string         `gorm:"type:varchar(255);comment:餐厅名称" json:"name,omitempty" form:"name" binding:"required"`        // 餐厅名称
+	Address   string         `gorm:"type:varchar(255);comment:餐厅地址" json:"address,omitempty" form:"address" binding:"required" ` // 餐厅地址
+	Phone     string         `gorm:"type:varchar(20);comment:注册电话" json:"phone,omitempty" form:"phone" binding:"required"`       // 注册电话
+	//todo 添加联系方式的结构体
+	Dishes []Dish // 一个餐厅有多个菜品，使用外键关联
+}
+
+// Add 添加商家
 // @Tags 商家管理
 // @Summary 添加商家
 // @Description 添加商家
@@ -21,42 +35,37 @@ import (
 // @Success 400 {object} string "添加失败"
 // @Success 401 {object} string "输入非法"
 // @Router /merchants [post]
-func AddMerchant(c *gin.Context) {
-	var m models.Merchant
+func (m Merchant) Add(c *gin.Context) {
 	_ = c.ShouldBind(&m)
 	//中文校验
-	err := tools.CheckChinese(&m.Name)
-	if err != nil {
-		c.JSON(401, "店铺名称"+err.Error())
+	if check.CheckChinese(&m.Name) {
+		c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 
 	}
 	//中文校验
-	err = tools.CheckChinese(&m.Address)
-	if err != nil {
-		c.JSON(401, m.Address+err.Error())
+	if check.CheckChinese(&m.Address) {
+		c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 		return
 
 	}
 	//手机号码校验
-	err = tools.CheckPhoneNumber(&m.Phone)
-	if err != nil {
-		c.JSON(401, m.Phone+err.Error())
+	if check.CheckPhoneNumber(&m.Phone) {
+		c.JSON(401, "手机号码输入非法")
 		return
 
 	}
 
-	err = dao.Add(&m)
+	err := dao.Add(&m)
 	if err != nil {
 		c.JSON(400, err)
 		return
 	}
 	c.JSON(200, m)
 	return
-
 }
 
-// UpdateMerchant 更新商家信息
+// Update 更新商家信息
 // @Tags 商家管理
 // @Summary 更新商家信息
 // @Description 更新商家信息
@@ -70,41 +79,35 @@ func AddMerchant(c *gin.Context) {
 // @Success 400 {object} string "添加失败"
 // @Success 401 {object} string "输入非法"
 // @Router /merchants [put]
-func UpdateMerchant(c *gin.Context) {
-	var (
-		m   models.Merchant
-		err error
-	)
+func (m Merchant) Update(c *gin.Context) {
+	var err error
 	_ = c.ShouldBind(&m)
 	//中文校验
 	if m.Name != "" {
-		err = tools.CheckChinese(&m.Name)
-		if err != nil {
-			c.JSON(401, "店铺名称"+err.Error())
+		if check.CheckChinese(&m.Name) {
+			c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 			return
 
 		}
 	}
 	if m.Address != "" {
 		//中文校验
-		err = tools.CheckChinese(&m.Address)
-		if err != nil {
-			c.JSON(401, m.Address+err.Error())
+		if check.CheckChinese(&m.Address) {
+			c.JSON(401, "仅允许中文、英文字母、数字和空白字符，和常见标点符号")
 			return
 
 		}
 	}
 	//手机号码校验
 	if m.Phone != "" {
-		err = tools.CheckPhoneNumber(&m.Phone)
-		if err != nil {
-			c.JSON(401, m.Phone+err.Error())
+		if check.CheckPhoneNumber(&m.Phone) {
+			c.JSON(401, "手机号码输入非法")
 			return
 
 		}
 	}
-	mOld := models.Merchant{ID: m.ID}
-	var values []models.Merchant
+	mOld := Merchant{ID: m.ID}
+	var values []Merchant
 	err = dao.PerfectMatch(&mOld, &values, "Dishes")
 	if err != nil && err.Error() != "" {
 		c.JSON(500, err)
@@ -132,10 +135,9 @@ func UpdateMerchant(c *gin.Context) {
 		}
 		c.JSON(200, nil)
 	}
-
 }
 
-// ListMerchant 列出所有商家
+// List 列出所有商家
 // @Tags 商家管理
 // @Summary 列出所有商家
 // @Description 获取所有商家列表
@@ -144,13 +146,13 @@ func UpdateMerchant(c *gin.Context) {
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /merchants [get]
-func ListMerchant(c *gin.Context) {
-	var values []models.Merchant
+func (m Merchant) List(c *gin.Context) {
+	var values []Merchant
 	err := dao.List(&values, "Dishes")
 	findCheck(c, values, err)
 }
 
-// PerfectMerchant 准确获取商家信息
+// Perfect 准确获取商家信息
 // @Tags 商家管理
 // @Summary 准确获取商家信息
 // @Description 根据商家名称获取商家信息
@@ -161,8 +163,8 @@ func ListMerchant(c *gin.Context) {
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /merchants/perfect [get]
-func PerfectMerchant(c *gin.Context) {
-	m := models.Merchant{
+func (m Merchant) Perfect(c *gin.Context) {
+	m = Merchant{
 		Name: c.Query("name"),
 	}
 	if m.Name == "" {
@@ -170,13 +172,13 @@ func PerfectMerchant(c *gin.Context) {
 		return
 	}
 
-	var values []models.Merchant
+	var values []Merchant
 	err := dao.PerfectMatch(&m, &values, "Dishes")
 	findCheck(c, values, err)
 
 }
 
-// FuzzyMerchant 模糊搜索商家信息
+// Fuzzy 模糊搜索商家信息
 // @Tags 商家管理
 // @Summary 模糊搜索商家信息
 // @Description 根据商家名称模糊搜索商家信息
@@ -187,18 +189,18 @@ func PerfectMerchant(c *gin.Context) {
 // @Failure 404 {object} string "资源未找到"
 // @Failure 500 {object} string "查询失败"
 // @Router /merchants/fuzzy [get]
-func FuzzyMerchant(c *gin.Context) {
+func (m Merchant) Fuzzy(c *gin.Context) {
 	name := c.Query("name")
 	if name == "" {
 		c.JSON(400, nil)
 		return
 	}
-	var values []models.Merchant
+	var values []Merchant
 	err := dao.FuzzyMatch(name, &values, "Dishes")
 	findCheck(c, values, err)
 }
 
-// DeleteMerchant 根据 id 删除指定商家，及其菜品
+// Delete 根据 id 删除指定商家，及其菜品
 // @Tags 商家管理
 // @Summary 根据 id 删除指定商家，及其菜品
 // @Description 根据 id 删除指定商家，及其菜品
@@ -208,7 +210,7 @@ func FuzzyMerchant(c *gin.Context) {
 // @Success 400 {object} string "输入非法"
 // @Success 500 {object} string "删除失败"
 // @Router /merchants [delete]
-func DeleteMerchant(c *gin.Context) {
+func (m Merchant) Delete(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Query("id"))
 	if id == 0 || err != nil {
@@ -216,7 +218,7 @@ func DeleteMerchant(c *gin.Context) {
 		return
 	}
 
-	merchant := models.Merchant{ID: uint(id)}
+	merchant := Merchant{ID: uint(id)}
 	//永久删除商家，选择级联硬删除
 	err = dao.Del(&merchant, 3)
 	//todo 伪bug 已经 删除的能够再次删除
