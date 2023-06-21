@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <title>订单</title>
+</head>
+<body>
+<div class="app" ?>
+    <!--header-->
+    <div class="order-header">
+        <div class="text-white text-xl font-bold ">订单</div>
+
+    </div>
+    <!--cards-->
+
+    <div class="order_list">
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+        {{ template "order_card.html" . }}
+
+
+        <!-- Add more list items as needed -->
+    </div>
+
+    <!--导航栏-->
+    {{ template "navigation.html" . }}
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+    <title>商家信息</title>
+</head>
+<body>
+<div class="app">
+    <!--header-->
+    <div class="merchant-header">
+        <div class="text-white text-xl font-bold ">商家信息</div>
+
+    </div>
+    <!--商家信息-->
+    <div class="merchant-information">
+        <img class="merchant-information-img "
+             src="https://img.alicdn.com//imgextra/i4/2209544466960/O1CN019cJ03q21HjFZdjhrG_!!2209544466960-2-koubei.png"
+             alt="Logo">
+        <div class="merchant-information-content">
+            <h1 class="text-xl font-bold">万家饺子</h1>
+            <div class="text-gray-500 ">￥15起送 ￥3配送</div>
+            <div class="text-gray-500 ">各种饺子炒菜</div>
+        </div>
+    </div>
+    <div class="dish-list">
+        {{ template "dish-card.html" . }}
+        {{ template "dish-card.html" . }}
+        {{ template "dish-card.html" . }}
+        {{ template "dish-card.html" . }}
+        {{ template "dish-card.html" . }}
+
+    </div>
+    <!--导航栏-->
+    {{ template "order-total.html" . }}
+</div>
+</body>
+</html>

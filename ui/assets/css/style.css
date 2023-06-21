@@ -551,6 +551,9 @@ video {
 .flex-row {
   flex-direction: row;
 }
+.flex-col {
+  flex-direction: column;
+}
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -566,15 +569,41 @@ video {
 .justify-items-center {
   justify-items: center;
 }
+.rounded {
+  border-radius: 0.25rem;
+}
 .rounded-full {
   border-radius: 9999px;
 }
 .rounded-md {
   border-radius: 0.375rem;
 }
+.rounded-l {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.rounded-r {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+.border {
+  border-width: 1px;
+}
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 .bg-green-400 {
   --tw-bg-opacity: 1;
@@ -590,6 +619,13 @@ video {
 }
 .fill-current {
   fill: currentColor;
+}
+.p-2 {
+  padding: 0.5rem;
+}
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 .px-4 {
   padding-left: 1rem;
@@ -950,7 +986,12 @@ video {
 }
 
 .order_card {
+  position: relative;
   margin: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -964,9 +1005,26 @@ video {
 
 .order_card_merchant {
   margin-bottom: 1rem;
-  display: grid;
+  display: flex;
   height: 2rem;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+}
+.order_card_dish {
+  margin-bottom: 1rem;
+  display: flex;
+  height: auto;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+}
+.order-card-merchant-item {
+  position: relative;
+  height: auto;
+  width: 33.333333%;
   align-items: center;
   justify-items: center;
 }
@@ -1071,14 +1129,34 @@ video {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  position: sticky;
-  flex-direction: row;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  overflow: auto;
+  justify-items: center;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-    height: 40%;
+    height: 25%;
+}
+
+.merchant-information-img {
+  position: relative;
+  margin: 0.5rem;
+  height: auto;
+  width: auto;
+  border-radius: 0.5rem;
+    height: 50%;
+}
+
+.merchant-information-content {
+  position: relative;
+  margin: 0.5rem;
+  display: flex;
+  width: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+    height: 50%;
 }
 
 /*dish css*/
@@ -1101,7 +1179,7 @@ video {
   overflow: auto;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-    height: 45%;
+    height: 60%;
 }
 
 .dish-card {
@@ -1122,6 +1200,35 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.dish-card-img {
+  position: relative;
+  margin: 0.5rem;
+  display: flex;
+  height: auto;
+  width: auto;
+  flex-direction: row;
+  border-radius: 0.5rem;
+}
+
+.dish-card-content {
+  position: relative;
+  margin: 0.5rem;
+  display: flex;
+  width: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-items: center;
+}
+
+.dish-card-button {
+  position: relative;
+  margin: 0.5rem;
+  display: flex;
+  width: auto;
+  flex-direction: row;
+  align-items: center;
+  justify-items: center;
+}
 
 .img_card_list {
   display: flex;
@@ -1199,5 +1306,10 @@ video {
   border-width: 2px;
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.hover\:bg-gray-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
 

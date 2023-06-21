@@ -1,0 +1,64 @@
+<!--<div class="order-information ">-->
+<!--    <div>-->
+<!--        <div class="text-xl font-bold">订单信息</div>-->
+<!--        <div class="text-gray-500">订单号：{{ .Order.OrderId }}</div>-->
+<!--        <div class="text-gray-500">下单时间：{{ .Order.CreatedAt }}</div>-->
+<!--        <div class="text-gray-500">订单状态：{{ .Order.Status }}</div>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <div class="text-xl font-bold">收货信息</div>-->
+<!--        <div class="text-gray-500">收货人：{{ .Order.ReceiverName }}</div>-->
+<!--        <div class="text-gray-500">联系电话：{{ .Order.ReceiverPhone }}</div>-->
+<!--        <div class="text-gray-500">收货地址：{{ .Order.ReceiverAddress }}</div>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <div class="text-xl font-bold">支付信息</div>-->
+<!--        <div class="text-gray-500">支付方式：{{ .Order.PaymentMethodName }}</div>-->
+<!--        <div class="text-gray-500">支付状态：{{ .Order.PaymentStatus }}</div>-->
+<!--    </div>-->
+<!--</div>-->
+<div class="order-information">
+    <div>
+        <div class="text-xl font-bold">订单信息</div>
+        <div class="text-gray-500">订单号：123456789</div>
+        <div class="text-gray-500">下单时间：2023-06-19 10:00 AM</div>
+    </div>
+    <div>
+        <div class="text-xl font-bold">收货信息</div>
+        <div class="text-gray-500">收货人：张三</div>
+        <div class="text-gray-500">联系电话：123-456-7890</div>
+        <div class="text-gray-500">收货地址：胡同路18号</div>
+    </div>
+    <div>
+        <div class="text-xl font-bold">支付信息</div>
+        <div class="flex items-center">
+            <div class="text-gray-500 mr-2">支付方式：</div>
+            <select id="paymentMethod" class="py-2 px-3 rounded border border-gray-300">
+                <option value="creditCard">信用卡</option>
+                <option value="bankTransfer">银行转账</option>
+                <option value="paypal">PayPal</option>
+            </select>
+        </div>
+    </div>
+    <div class="dish-card">
+        <div class="dish-card-img">
+            <img src="https://pic.616pic.com/ys_img/00/15/52/bHo9fwepW4.jpg"
+                 alt="Logo"></div>
+        <div class="dish-card-content">
+            <!--            <h1 class="text-2xl font-semibold mb-2">{{.Name}}</h1>-->
+            <!--            <p class="text-sm text-gray-500 mb-2">￥{{.Price}}</p>-->
+            <!--            <p class="text-sm mb-4">{{.Description}}</p>-->
+            <h1 class="text-2xl font-semibold mb-2">广式鲜虾肠粉</h1>
+            <p class="text-sm text-gray-500 mb-2">新鲜虾仁</p>
+            <p class="text-sm mb-4">￥15</p>
+        </div>
+        <div class="dish-card-button">
+            <span class="p-2 bg-gray-100 border border-gray-300" id="counter">1</span>
+        </div>
+
+
+    </div>
+
+</div>
+
+
